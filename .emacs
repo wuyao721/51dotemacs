@@ -1,3 +1,69 @@
+;;; 51dotemacs.el --- Display a tab bar in the header line
+
+;; Copyright (C) 2011, 2012, 2013 WuYao
+
+;; Author: WuYao <wuyao721@163.com>
+;; Maintainer: WuYao <wuyao721@163.com>
+;; Keywords: 51dotemacs
+
+;;; key binding
+;; [f4]                              kill-this-buffer
+;; [f9]                              repeat
+;; %                                 match-paren
+;; M-y                               yank-pop
+;; C-o                               lambda: open a new line at this line
+;; C-z                               nil (for screen)
+;; C-c b                             popup-menu-bookmark
+;; C-c i                             popup-menu-insert
+;; C-c j                             dired-jump
+;; C-c l                             find-file
+;; C-c o                             recentf-ido-find-file
+;; C-c r                             redo
+;; C-c f                             find-dired
+;; C-c g                             grep-find
+;; C-c G                             cplusplus-grep-find
+;; C-c t                             grep-find-replace
+;; C-c T                             cplusplus-grep-find-replace
+;; C-c m                             set-mark-command
+;; C-c u                             undo
+;; C-c h                             tabbar-press-home
+;; C-c d l                           dictionary-lookup-definition
+;; C-c d s                           dictionary-search
+;; C-c d m                           dictionary-match-words
+;; C-c p a                           bashdb
+;; C-c p C                           calculator
+;; C-c p c                           compile
+;; C-c p e                           eshell
+;; C-c p g                           gdb
+;; C-c p i                           info
+;; C-c p m                           mail
+;; C-c p p                           org2blog/wp-mode
+;; C-c p P                           org2blog/wp-new-entry
+;; C-c p r                           rot13-region
+;; C-c p s                           shell-toggle-cd
+;; C-c p t                           lambda
+;; C-c p v                           svn-status
+;; C-c p w                           woman
+;; C-c p 3                           w3m
+;; C-x C-b                           ibuffer                               
+;; C-c C-j                           tabbar-forward-group
+;; C-c C-k                           tabbar-backward-group
+;; C-c C-h                           tabbar-backward-tab
+;; C-c C-l                           tabbar-forward-tab
+;; C-x C-e                           eval-region
+;; C-c M-d                           my-kill-word
+;; C-c M-f                           my-forward-word
+;; C-c M-w                           my-kill-ring-save
+;; C-<tab>                           tabbar-forward-tab
+;; C-S-<iso-lefttab>                 tabbar-backward-tab
+;; <C-S-tab>                         tabbar-backward-tab
+;; <wheel-down>                      lambda: scroll up 2 line
+;; <wheel-up>                        lambda: scroll down 2 line
+;; [mouse-4]                         lambda: scroll down 2 line
+;; [mouse-5]                         lambda: scroll up 2 line
+
+(defconst 51dotemacs-version "1.51")
+
 (setq my-lisp-root "~/.emacs.d/elisp")
 
 ;; set load-path
@@ -12,6 +78,7 @@
 		    (concat my-lisp-root "/" "wubi"))))
 
 ;; Appearance effects
+;; 
 (setq inhibit-startup-message t)                      ;forbid startup message
 (setq display-time-day-and-date t)                    ;day, date and time
 (display-time)                                        ;time on status bar
@@ -19,10 +86,7 @@
 (show-paren-mode 1)                                   ;show the corresponding parenthesis
 (tool-bar-mode -1)                                    ;no tool bar
 (menu-bar-mode 1)                                     ;remain menu bar
-(scroll-bar-mode 1)                                   ;remain scroll bar
-(set-scroll-bar-mode 'right)                          ;scroll bar on right
 (global-auto-revert-mode 1)			      ;auto revert
-(ido-mode 1)					      ;ido mode
 (transient-mark-mode t)                               ;select text high light
 (global-font-lock-mode t)                             ;key word colorfull
 (setq frame-title-format "emacs@%b%@")                ;title name format
@@ -32,23 +96,11 @@
 ;(set-language-environment "Chinese-GBK")
 ;; Appearance effects
 
-;; others
-(setq-default make-backup-files nil)                  ;no backup file
-(setq kill-ring-max 500)                              ;kill ring
-(setq mouse-yank-at-point t)                          ;yank not at mouse but at cursor
-(fset 'yes-or-no-p 'y-or-n-p)                         ;'y' and 'n' replay 'yes' and 'no'
-(setq bookmark-default-file ".bookmark.el")           ;bookmark file name
-(setq default-major-mode 'text-mode)                  ;default mode
-;; others
-
-;; Key Binding
-(global-set-key (kbd "<wheel-down>") '(lambda nil (interactive) (scroll-up 2)))
-(global-set-key (kbd "<wheel-up>") '(lambda nil (interactive) (scroll-down 2)))
-(global-set-key [mouse-4] '(lambda nil (interactive) (scroll-down 2)))
-(global-set-key [mouse-5] '(lambda nil (interactive) (scroll-up 2)))
+;;; Control
+;; 
+(ido-mode 1)					      ;ido mode
 (global-set-key [f4] 'kill-this-buffer)
 (global-set-key [f9] 'repeat)
-
 (global-set-key "%" 'match-paren)
 (defun match-paren (arg)
   "Go to the matching paren if on a paren; otherwise insert %."
@@ -64,69 +116,93 @@
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-z") 'nil)
 ;;(global-set-key (kbd "C-<tab>") 'hippie-expand)
-(global-set-key (kbd "C-c b") 'popup-menu-bookmark)
-;(global-set-key (kbd "C-c e") 'popup-menu-edit)
-(global-set-key (kbd "C-c i") 'popup-menu-insert)
-(global-set-key (kbd "C-c j") 'dired-jump)
 (global-set-key (kbd "C-c l") 'find-file)
-(global-set-key (kbd "C-c o") 'recentf-ido-find-file)
-(global-set-key (kbd "C-c r") 'redo)
-(global-set-key (kbd "C-c f") 'find-dired)
-(global-set-key (kbd "C-c g") 'grep-find)
-(global-set-key (kbd "C-c G") 'cplusplus-grep-find)
-(global-set-key (kbd "C-c t") 'grep-find-replace)
-(global-set-key (kbd "C-c T") 'cplusplus-grep-find-replace)
 (global-set-key (kbd "C-c m") 'set-mark-command)
-(global-set-key (kbd "C-c u") 'undo)
-(global-set-key (kbd "C-c h") 'tabbar-press-home)
-(global-set-key (kbd "C-<tab>") 'tabbar-forward-tab)
-(global-set-key (kbd "C-S-<iso-lefttab>") 'tabbar-backward-tab)
-(global-set-key (kbd "<C-S-tab>") 'tabbar-backward-tab)
-(global-set-key (kbd "C-c C-j") 'tabbar-forward-group)
-(global-set-key (kbd "C-c C-k") 'tabbar-backward-group)
-(global-set-key (kbd "C-c C-h") 'tabbar-backward-tab)
-(global-set-key (kbd "C-c C-l") 'tabbar-forward-tab)
 (global-set-key (kbd "C-x C-e") 'eval-region)
-(global-set-key (kbd "C-c d l") 'dictionary-lookup-definition)
-(global-set-key (kbd "C-c d s") 'dictionary-search)
-(global-set-key (kbd "C-c d m") 'dictionary-match-words)
 (global-set-key (kbd "C-c M-d") 'my-kill-word)
 (global-set-key (kbd "C-c M-f") 'my-forward-word)
 (global-set-key (kbd "C-c M-w") 'my-kill-ring-save)
-;; Key Binding
-
-;; Key Binding (C-c p)
-(global-set-key (kbd "C-c p a") 'bashdb)
 (global-set-key (kbd "C-c p C") 'calculator)
-(global-set-key (kbd "C-c p c") 'compile)
 (global-set-key (kbd "C-c p e") 'eshell)
+(global-set-key (kbd "C-c p c") 'compile)
 (global-set-key (kbd "C-c p g") 'gdb)
 (global-set-key (kbd "C-c p i") 'info)
 (global-set-key (kbd "C-c p m") 'mail)
-(global-set-key (kbd "C-c p p") 'perldb)
+;(global-set-key (kbd "C-c p p") 'perldb)
 (global-set-key (kbd "C-c p r") 'rot13-region)
-(global-set-key (kbd "C-c p s") 'shell-toggle-cd)
 ;;(global-set-key (kbd "C-c p t") 'toggle-debug-on-error)
 (global-set-key (kbd "C-c p t") (function 
 				 (lambda nil (interactive) 
 				   (find-file "~/.emacs.d/elisp/.tmp.org"))))
-(global-set-key (kbd "C-c p v") 'svn-status)
 (global-set-key (kbd "C-c p w") 'woman)
 (global-set-key (kbd "C-c p 3") 'w3m)
-;; Key Binding (C-c p)
 
-;; color-theme: choose my color theme
-;; usage:    auto
-(if (not (require 'color-theme nil t))
-    (message "[warn] feature 'color-theme' not found!")
-  (if (not (eq window-system nil)) 
-      (color-theme-gnome2)))		;kingsajz, classic, dark-blue and snow are also good.
-;; color-theme
+;; Use Habit
+;; 
+(setq hscroll-step 1)
+(setq scroll-conservatively 100000)
+(setq scroll-margin 3)
+(setq scroll-step 1)
+(setq woman-use-own-frame nil)
+(setq-default make-backup-files nil)                  ;no backup file
+(setq kill-ring-max 500)                              ;kill ring
+(setq mouse-yank-at-point t)                          ;yank not at mouse but at cursor
+(fset 'yes-or-no-p 'y-or-n-p)                         ;'y' and 'n' replay 'yes' and 'no'
+(setq bookmark-default-file ".bookmark.el")           ;bookmark file name
+(setq default-major-mode 'text-mode)                  ;default mode
+
+;;; setting difference from window-system 
+;;
+(if (eq window-system nil)
+    t
+  (scroll-bar-mode 1)                                   ;remain scroll bar
+  (set-scroll-bar-mode 'right)                          ;scroll bar on right
+  (global-set-key (kbd "<wheel-down>") '(lambda nil (interactive) (scroll-up 2)))
+  (global-set-key (kbd "<wheel-up>") '(lambda nil (interactive) (scroll-down 2)))
+  (global-set-key [mouse-4] '(lambda nil (interactive) (scroll-down 2)))
+  (global-set-key [mouse-5] '(lambda nil (interactive) (scroll-up 2)))
+
+  ;; color-theme: choose my color theme
+  (if (not (require 'color-theme nil t))
+      (message "[warn] feature 'color-theme' not found!")
+    (color-theme-gnome2))	                        ;kingsajz, classic, dark-blue and snow are also good.
+  ;; color-theme
+
+  ;; tabbar:
+  (if (not (require 'tabbar nil t))
+      (message "[warn] feature 'tabbar' not found!")
+    (global-set-key (kbd "C-c h") 'tabbar-press-home)
+    (global-set-key (kbd "C-<tab>") 'tabbar-forward-tab)
+    (global-set-key (kbd "C-S-<iso-lefttab>") 'tabbar-backward-tab)
+    (global-set-key (kbd "<C-S-tab>") 'tabbar-backward-tab)
+    (global-set-key (kbd "C-c C-j") 'tabbar-forward-group)
+    (global-set-key (kbd "C-c C-k") 'tabbar-backward-group)
+    (global-set-key (kbd "C-c C-h") 'tabbar-backward-tab)
+    (global-set-key (kbd "C-c C-l") 'tabbar-forward-tab)
+    (setq tabbar-buffer-groups-function (lambda () (list "All")))
+    (tabbar-mode))
+  ;; tabbar 
+  )
+
+;; redo: Redo/undo system for Emacs
+;; usage:    C-c r (or M-x redo)
+(autoload 'undo "redo" "undo" t)
+(autoload 'redo "redo" "redo" t)
+(global-set-key (kbd "C-c u") 'undo)
+(global-set-key (kbd "C-c r") 'redo)
+;; redo
+
+;; browse-kill-ring: browse kill ring and interactively insert items from kill-ring
+;; usage:    M-y (or M-x yank-pop)
+(if (not (require 'browse-kill-ring nil t) )
+    (message "[warn] feature 'browse-kill-ring' not found!")    
+  (browse-kill-ring-default-keybindings))
+;; browse-kill-ring
 
 ;; unique: unique buffer name(guard duplication of buffer name)
 ;; usage:    auto
 (if (not (require 'uniquify nil t))
-    (message "[warn] feature 'dired' not found!")
+    (message "[warn] feature 'uniquify' not found!")
   (setq uniquify-buffer-name-style 'forward))  
 ;; unique
 
@@ -134,6 +210,9 @@
 ;; usage: C-c j (or M-x dired-jump)
 (if (not (require 'dired nil t))
     (message "[warn] feature 'dired' not found!")
+
+  (global-set-key (kbd "C-c j") 'dired-jump)
+  (global-set-key (kbd "C-c f") 'find-dired)
 
   ;; wdired
   (autoload 'wdired-change-to-wdired-mode "wdired")
@@ -180,7 +259,7 @@
 (defun my-view-mode-hook ()
   (setq view-read-only t)
   (define-key view-mode-map "C" 'nil)
-  (define-key view-mode-map "c" 'nil)
+Appearance effects  (define-key view-mode-map "c" 'nil)
   (define-key view-mode-map "o" 'nil)
   (define-key view-mode-map "k" 'View-scroll-line-backward)
   (define-key view-mode-map "j" 'View-scroll-line-forward)
@@ -202,7 +281,11 @@
   "ÎÒµÄC/C++ÓïÑÔ±à¼­²ßÂÔ"
   ;;(define-key c-mode-base-map [(f1)] 'next-error)
   ;;(define-key c-mode-base-map [(f2)] 'previous-error)
+
+  ;; switch-h-cpp
+  (autoload 'neassist-switch-h-cpp "switch-h-cpp" "Major mode for switch between .h file and .cpp file." t)
   (define-key c-mode-base-map (kbd "M-o") 'neassist-switch-h-cpp)
+
   (define-key c-mode-base-map [(f5)] 'compile)
   (define-key c-mode-base-map [(f1)] 'cplusplus-grep-find)
   (define-key c-mode-base-map (kbd "<mouse-3>") 'cplusplus-quick-grep-find)
@@ -281,7 +364,11 @@
 ;; misc-goodies: 
 ;; usage:    
 (if (not (require 'misc-goodies nil t))
-    (message "[warn] feature 'misc-goodies' not found!"))
+    (message "[warn] feature 'misc-goodies' not found!")
+  (global-set-key (kbd "C-c b") 'popup-menu-bookmark)
+  (global-set-key (kbd "C-c i") 'popup-menu-insert)
+  ;;(global-set-key (kbd "C-c e") 'popup-menu-edit)
+  )
 ;; misc-goodies
 
 ;; misc-org: 
@@ -290,15 +377,6 @@
     (message "[warn] feature 'org' not found!")
   (require 'misc-org nil t))
 ;; misc-goodies
-
-;; tabbar:
-;; usage:    auto
-(if (not (require 'tabbar nil t))
-    (message "[warn] feature 'tabbar' not found!")
-  (setq tabbar-buffer-groups-function (lambda () (list "All")))
-  ;;(setq tabbar-buffer-groups-function 'tabbar-buffer-my-groups)
-  (tabbar-mode))
-;; tabbar
 
 ;; misc-menu
 ;; usage:    
@@ -346,21 +424,17 @@
 				 visual-basic-mode)) auto-mode-alist))
 ;; vb
 
-;; redo: Redo/undo system for Emacs
-;; usage:    C-c r (or M-x redo)
-(autoload 'undo "redo" "undo" t)
-(autoload 'redo "redo" "redo" t)
-;; redo
-
-;; browse-kill-ring: browse kill ring and interactively insert items from kill-ring
-;; usage:    M-y (or M-x yank-pop)
-(if (not (require 'browse-kill-ring nil t) )
-    (message "[warn] feature 'browse-kill-ring' not found!")    
-  (browse-kill-ring-default-keybindings))
-;; browse-kill-ring
+;; grep: 
+(global-set-key (kbd "C-c g") 'grep-find)
+(global-set-key (kbd "C-c G") 'cplusplus-grep-find)
+(global-set-key (kbd "C-c t") 'grep-find-replace)
+(global-set-key (kbd "C-c T") 'cplusplus-grep-find-replace)
+(setq grep-find-command "find . -name '*' -type f -print0 | xargs -0 -e grep -nH -e ")
+;; grep 
 
 ;; psvn: subversion interface for emacs
 ;; usage:    M-x svn-status
+(global-set-key (kbd "C-c p v") 'svn-status)
 (autoload 'svn-status "psvn" "subversion interface for emacs" t)
 ;; psvn
 
@@ -375,6 +449,9 @@
 (autoload 'dictionary-search "dictionary" "dictionary-search" t)
 (autoload 'dictionary-lookup-definition "dictionary" "dictionary-lookup-definition" t)
 (autoload 'dictionary-match-words "dictionary" "dictionary-match-words" t)
+(global-set-key (kbd "C-c d l") 'dictionary-lookup-definition)
+(global-set-key (kbd "C-c d s") 'dictionary-search)
+(global-set-key (kbd "C-c d m") 'dictionary-match-words)
 ;; dictionary
 
 ;; sr-speedbar: single frame speedbar
@@ -398,7 +475,8 @@
 ;; shell-toggle: quick to shell
 ;; usage:    C-c p s (or M-x shell-toggle)
 (if (not (require 'shell-toggle nil t))
-    (message "[warn] feature 'shell-toggle' not found!"))
+    (message "[warn] feature 'shell-toggle' not found!")
+  (global-set-key (kbd "C-c p s") 'shell-toggle-cd))
 ;; shell-toggle
 
 ;; multi-shell: multi shell
@@ -466,6 +544,7 @@ to find the text that grep hits refer to."
 ;; bashdb: bash debugger
 ;; usage: M-x bashdb
 (autoload 'bashdb "bashdb" "BASH Debugger mode via GUD and bashdb" t)
+(global-set-key (kbd "C-c p a") 'bashdb)
 ;; bashdb
 
 ;; misc-muse: muse
@@ -517,29 +596,32 @@ to find the text that grep hits refer to."
 ;; usage:    C-c o (or M-x recentfopen)
 ;;(require 'cl-seq)
 ;;(require 'cl)
-(defun recentf-ido-find-file ()
-  "Find a recent file using Ido."
-  (interactive)
-  (if (or (not (boundp 'ido-mode)) (eq ido-mode nil)) ; whether ido enabled?
-      (recentf-open-files)
-    (let* ((file-assoc-list
-	    (mapcar (lambda (x)
-		      (cons (file-name-nondirectory x) ;eg. "C:/Emacs/my-elisp/.emacs" -->> ( ".emacs" . "C:/Emacs/my-elisp/.emacs" )
-			    x))
-		    recentf-list))
-	   (filename-list (mapcar #'car file-assoc-list))
-	   ;;(filename-list
-	   ;; (remove-duplicates (mapcar #'car file-assoc-list)
-	   ;; 	       :test #'string=))
-	   (filename (ido-completing-read "Choose recent file: "
-					  filename-list
-					  nil
-					  t)))
-      (when filename
-	(find-file (cdr (assoc filename
-			       file-assoc-list)))))))
 (if (not (require 'recentf nil t))
     (message "[warn] feature 'recentf' not found!")
+
+  (defun recentf-ido-find-file ()
+    "Find a recent file using Ido."
+    (interactive)
+    (if (or (not (boundp 'ido-mode)) (eq ido-mode nil)) ; whether ido enabled?
+	(recentf-open-files)
+      (let* ((file-assoc-list
+	      (mapcar (lambda (x)
+			(cons (file-name-nondirectory x) ;eg. "C:/Emacs/my-elisp/.emacs" -->> ( ".emacs" . "C:/Emacs/my-elisp/.emacs" )
+			      x))
+		      recentf-list))
+	     (filename-list (mapcar #'car file-assoc-list))
+	     ;;(filename-list
+	     ;; (remove-duplicates (mapcar #'car file-assoc-list)
+	     ;; 	       :test #'string=))
+	     (filename (ido-completing-read "Choose recent file: "
+					    filename-list
+					    nil
+					    t)))
+	(when filename
+	  (find-file (cdr (assoc filename
+				 file-assoc-list)))))))
+
+  (global-set-key (kbd "C-c o") 'recentf-ido-find-file)
   (recentf-mode 1))
 ;;quick access for recent open file
 ;; recentf
@@ -575,7 +657,6 @@ to find the text that grep hits refer to."
 ;      (semantic-load-enable-code-helpers)
 ;      (global-srecode-minor-mode 1))))
 
-(autoload 'neassist-switch-h-cpp "switch-h-cpp" "Major mode for switch between .h file and .cpp file." t)
 (defun my-load-cedet ()
   (interactive)
   (add-hook 'c-mode-common-hook 'my-cedet-hook))
@@ -646,7 +727,6 @@ to find the text that grep hits refer to."
 #+PERMALINK: 
 #+TITLE:
 \n")
-
   )
 
 ;; org2blog
@@ -665,24 +745,6 @@ to find the text that grep hits refer to."
 ;    (desktop-read)
 ;    (setq desktop-enable t)))
 ;; desktop
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(grep-find-command "find . -name '*' -type f -print0 | xargs -0 -e grep -nH -e ")
- '(hscroll-step 1)
- '(scroll-conservatively 100000)
- '(scroll-margin 3)
- '(scroll-step 1)
- '(woman-use-own-frame nil))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 
 (set-frame-size (selected-frame) 80 20)
 
