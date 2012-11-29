@@ -761,4 +761,4 @@ to find the text that grep hits refer to."
 ;; usage:    emacsclient ...
 (if (eq system-type 'windows-nt)
     (server-start)) 
-;; emacs server	
+;; emacs server
