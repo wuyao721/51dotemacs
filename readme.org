@@ -13,6 +13,7 @@
   6. 查看并修改C:/Emacs/.emacs文件，将Emacs变成你要的样子
 
 * Linux平台快速搭建Emacs
+
 : cd ~/
 : git clone git://github.com/wuyao721/51dotemacs.git
 : cp 51dotemacs/.screenrc ~/
@@ -20,12 +21,6 @@
 : cp -r 51dotemacs/.emacs.d ~/
 : rm -rf 51dotemacs
 
-QQ：289811390 微博：weibo.com/wuyao721 技术博客：blog.csdn.net/wuyao721
+** screenrc
+: cp 51dotemacs/.screenrc ~/
 
-* org-mode
-我用emacs的org-mode来编写文档，感觉效率挺高的，不必关注排版问题。
-
-* org2blog
-org文档可以通过 *org2blog* 发送到 *wordpress* 网站。
-
-https://emacs-for-windows.googlecode.com/files/Emacs24.BZR.106722.Win32.20111223.zip
