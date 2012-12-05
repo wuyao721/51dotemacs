@@ -1,0 +1,31 @@
+#+TAGS: org-mode, github
+#+TITLE: 项目说明
+
+这个项目存放我的emacs的配置文件。
+
+* Windows平台下快速搭建Emacs
+
+  1. 到 [[https://code.google.com/p/emacs-for-windows][这里]] 下载编译好的emacs，将其解压到C:/Emacs目录下
+  2. 下载本项目的配置文件master.zip，将 *51dotemacs-master* 的内容解压到C:/Emacs目录下
+  3. 将C:/Emacs/.emacs.d/elisp目录下的XXX.example.el该名为XXX.el，并酌情修改，主要是设置环境变量
+  4. 导入quick_open.reg和set_path.reg到注册表，前者是右键打开文件，后者是设置Emacs的HOME目录
+  5. 下载微软雅黑consolas字体库(YaHei.Consolas.1.11b.ttf)，并将其导入windows字体库。
+  6. 查看并修改C:/Emacs/.emacs文件，将Emacs变成你要的样子
+
+* Linux平台快速搭建Emacs
+: cd ~/
+: git clone git://github.com/wuyao721/51dotemacs.git
+: cp 51dotemacs/.screenrc ~/
+: cp 51dotemacs/.emacs ~/
+: cp -r 51dotemacs/.emacs.d ~/
+: rm -rf 51dotemacs
+
+QQ：289811390 微博：weibo.com/wuyao721 技术博客：blog.csdn.net/wuyao721
+
+* org-mode
+我用emacs的org-mode来编写文档，感觉效率挺高的，不必关注排版问题。
+
+* org2blog
+org文档可以通过 *org2blog* 发送到 *wordpress* 网站。
+
+https://emacs-for-windows.googlecode.com/files/Emacs24.BZR.106722.Win32.20111223.zip
