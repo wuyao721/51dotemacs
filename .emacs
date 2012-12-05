@@ -259,7 +259,7 @@
 (defun my-view-mode-hook ()
   (setq view-read-only t)
   (define-key view-mode-map "C" 'nil)
-Appearance effects  (define-key view-mode-map "c" 'nil)
+  (define-key view-mode-map "c" 'nil)
   (define-key view-mode-map "o" 'nil)
   (define-key view-mode-map "k" 'View-scroll-line-backward)
   (define-key view-mode-map "j" 'View-scroll-line-forward)
