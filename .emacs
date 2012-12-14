@@ -84,6 +84,7 @@
 (display-time)                                        ;time on status bar
 (column-number-mode 1)                                ;column number on status bar
 (show-paren-mode 1)                                   ;show the corresponding parenthesis
+(tool-bar-mode -1)                                    ;no tool bar
 (menu-bar-mode 1)                                     ;remain menu bar
 (global-auto-revert-mode 1)			      ;auto revert
 (transient-mark-mode t)                               ;select text high light
@@ -154,7 +155,6 @@
 ;;
 (if (eq window-system nil)
     t
-  (tool-bar-mode -1)                                    ;no tool bar
   (scroll-bar-mode 1)                                   ;remain scroll bar
   (set-scroll-bar-mode 'right)                          ;scroll bar on right
   (global-set-key (kbd "<wheel-down>") '(lambda nil (interactive) (scroll-up 2)))
@@ -191,6 +191,17 @@
 (global-set-key (kbd "C-c u") 'undo)
 (global-set-key (kbd "C-c r") 'redo)
 ;; redo
+
+;; elpa: Emacs Lisp Package Archive
+;; usage:    list-packages
+;; xml-rpc
+(if (not (require 'package nil t) )
+    (message "[warn] feature 'browse-kill-ring' not found!")    
+  (add-to-list 'package-archives 
+	       '("marmalade" . "http://marmalade-repo.org/packages/")
+	       '("melpa" . "http://melpa.milkbox.net/packages/"))
+  (package-initialize))
+;; elpa
 
 ;; browse-kill-ring: browse kill ring and interactively insert items from kill-ring
 ;; usage:    M-y (or M-x yank-pop)
@@ -259,7 +270,7 @@
 (defun my-view-mode-hook ()
   (setq view-read-only t)
   (define-key view-mode-map "C" 'nil)
-  (define-key view-mode-map "c" 'nil)
+Appearance effects  (define-key view-mode-map "c" 'nil)
   (define-key view-mode-map "o" 'nil)
   (define-key view-mode-map "k" 'View-scroll-line-backward)
   (define-key view-mode-map "j" 'View-scroll-line-forward)
