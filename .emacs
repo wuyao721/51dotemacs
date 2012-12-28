@@ -31,7 +31,7 @@
 ;; C-c d s                           dictionary-search
 ;; C-c d m                           dictionary-match-words
 ;; C-c p a                           bashdb
-;; C-c p C                           calculator
+;; C-c p C                           calc
 ;; C-c p c                           compile
 ;; C-c p e                           eshell
 ;; C-c p g                           gdb
@@ -121,7 +121,7 @@
 (global-set-key (kbd "C-c M-d") 'my-kill-word)
 (global-set-key (kbd "C-c M-f") 'my-forward-word)
 (global-set-key (kbd "C-c M-w") 'my-kill-ring-save)
-(global-set-key (kbd "C-c p C") 'calculator)
+(global-set-key (kbd "C-c p C") 'calc)
 (global-set-key (kbd "C-c p e") 'eshell)
 (global-set-key (kbd "C-c p c") 'compile)
 (global-set-key (kbd "C-c p g") 'gdb)
@@ -191,6 +191,18 @@
 (global-set-key (kbd "C-c u") 'undo)
 (global-set-key (kbd "C-c r") 'redo)
 ;; redo
+
+;; elpa: Emacs Lisp Package Archive
+;; usage:    list-packages
+;; xml-rpc
+(if (string-match "24." (emacs-version))
+    (if (not (require 'package nil t) )
+	(message "[warn] feature 'package' not found!")    
+      (add-to-list 'package-archives 
+		   '("marmalade" . "http://marmalade-repo.org/packages/")
+		   '("melpa" . "http://melpa.milkbox.net/packages/"))
+      (package-initialize)))
+;; elpa
 
 ;; browse-kill-ring: browse kill ring and interactively insert items from kill-ring
 ;; usage:    M-y (or M-x yank-pop)
