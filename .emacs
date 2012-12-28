@@ -31,7 +31,7 @@
 ;; C-c d s                           dictionary-search
 ;; C-c d m                           dictionary-match-words
 ;; C-c p a                           bashdb
-;; C-c p C                           calculator
+;; C-c p C                           calc
 ;; C-c p c                           compile
 ;; C-c p e                           eshell
 ;; C-c p g                           gdb
@@ -121,7 +121,7 @@
 (global-set-key (kbd "C-c M-d") 'my-kill-word)
 (global-set-key (kbd "C-c M-f") 'my-forward-word)
 (global-set-key (kbd "C-c M-w") 'my-kill-ring-save)
-(global-set-key (kbd "C-c p C") 'calculator)
+(global-set-key (kbd "C-c p C") 'calc)
 (global-set-key (kbd "C-c p e") 'eshell)
 (global-set-key (kbd "C-c p c") 'compile)
 (global-set-key (kbd "C-c p g") 'gdb)
