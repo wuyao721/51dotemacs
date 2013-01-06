@@ -2,8 +2,7 @@
 
 ;; Copyright (C) 2011, 2012, 2013 WuYao
 
-;; Author: WuYao <wuyao721@163.com>
-;; Maintainer: WuYao <wuyao721@163.com>
+;; Author: wuyao721 <wuyao721@163.com>
 ;; Keywords: 51dotemacs
 
 ;;; !!! Only support for emacs23 and emacs24. No test for emacs21 and emacs22 !!!
@@ -496,13 +495,13 @@
 ;;; git-emacs: git interface for emacs
 ;; usage:    M-x git-status
 (global-set-key (kbd "C-c p v g") 'git-status)
-(autoload 'git-status "git-status" "subversion interface for emacs" t)
+(autoload 'git-status "git-status" "git interface for emacs" t)
 ;; git-emacs
 
 ;;; magit-emacs: git interface for emacs
 ;; usage:    M-x magit-status
 (global-set-key (kbd "C-c p v m") 'magit-status)
-(autoload 'magit-status "magit" "subversion interface for emacs" t)
+(autoload 'magit-status "magit" "git interface for emacs" t)
 ;; git-emacs
 
 ;;; psvn: subversion interface for emacs
