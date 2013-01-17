@@ -23,7 +23,9 @@
 (defsubst git--status-header ()
   ;; Put spaces above the scrollbar and the fringe
   (format
-   (concat (make-string (+ (scroll-bar-columns 'left) (fringe-columns 'left))
+;; chang by wuyao721@163.com for emacs23-nox
+;;   (concat (make-string (+ (scroll-bar-columns 'left) (fringe-columns 'left))
+   (concat (make-string (+ 0 1)
                         ? )
            git--status-header-format)
    "M" "STATUS" "PERM" "SIZE" "FILE"))

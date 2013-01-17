@@ -2105,8 +2105,10 @@ been displayed.")
   ;; beginning of buffer name position
   (setq goal-column 3)
   (setq header-line-format
-        (concat (make-string (+ (scroll-bar-columns 'left)
-                                (fringe-columns 'left))
+;; chang by wuyao721@163.com for emacs23-nox
+;;        (concat (make-string (+ (scroll-bar-columns 'left)
+;;                                (fringe-columns 'left))
+        (concat (make-string (+ 0 1)
                              ? )
                 "Branch List"))
   (when (require 'hl-line nil t) (hl-line-mode)))
