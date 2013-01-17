@@ -29,9 +29,11 @@
 ;; sln-mode
 ;; pod-mode
 ;; bashdb
+;; gdb
 ;; perldb
+;; pydb
 
-;;; wuyao's key binding
+;;; wuyao's global key binding
 ;; [f4]                              kill-this-buffer
 ;; [f9]                              repeat
 ;; %                                 match-paren
@@ -55,11 +57,8 @@
 ;; C-c d l                           dictionary-lookup-definition
 ;; C-c d s                           dictionary-search
 ;; C-c d m                           dictionary-match-words
-;; C-c p a                           bashdb
-;; C-c p C                           calc
 ;; C-c p c                           compile
 ;; C-c p e                           eshell
-;; C-c p g                           gdb
 ;; C-c p i                           info
 ;; C-c p m                           mail
 ;; C-c p p                           org2blog/wp-new-entry
@@ -69,6 +68,10 @@
 ;; C-c p v s                         svn-status
 ;; C-c p v g                         git-status
 ;; C-c p v m                         magit-status
+;; C-c p d b                         bashdb
+;; C-c p d g                         gdb
+;; C-c p d p                         perldb
+;; C-c p d y                         pydb
 ;; C-c p w                           woman
 ;; C-c p 3                           w3m
 ;; C-x C-b                           ibuffer                               
@@ -89,6 +92,7 @@
 (setq my-lisp-root "~/.emacs.d/elisp")
 
 ;;; set load-path
+(add-to-list 'load-path (concat my-lisp-root "/" "org" ))
 (setq load-path
       (append load-path (list my-lisp-root 
 		    (concat my-lisp-root "/" "emacs-goodies-el")
@@ -143,13 +147,11 @@
 (global-set-key (kbd "C-c M-d") 'my-kill-word)
 (global-set-key (kbd "C-c M-f") 'my-forward-word)
 (global-set-key (kbd "C-c M-w") 'my-kill-ring-save)
-(global-set-key (kbd "C-c p C") 'calc)
 (global-set-key (kbd "C-c p e") 'eshell)
 (global-set-key (kbd "C-c p c") 'compile)
-(global-set-key (kbd "C-c p g") 'gdb)
+(global-set-key (kbd "C-c p d g") 'gdb)
 (global-set-key (kbd "C-c p i") 'info)
 (global-set-key (kbd "C-c p m") 'mail)
-;(global-set-key (kbd "C-c p p") 'perldb)
 (global-set-key (kbd "C-c p r") 'rot13-region)
 ;;(global-set-key (kbd "C-c p t") 'toggle-debug-on-error)
 (global-set-key (kbd "C-c p t") (function 
@@ -406,11 +408,19 @@
     (message "[warn] feature 'org' not found!")
 
   ;; org2blog
-  (add-hook 'org-mode-hook
-	    (lambda () (org2blog/wp-mode)))
   (autoload 'org2blog/wp-mode "org2blog" "Toggle org2blog/wp mode." t)
   (autoload 'org2blog/wp-new-entry "org2blog" "Creates a new blog entry." t)
-  (global-set-key (kbd "C-c p P") 'org2blog/wp-new-entry)
+  (add-hook 'org-mode-hook (lambda () 
+			     (setq truncate-lines nil) 
+			     (org2blog/wp-mode)))
+  (global-set-key (kbd "C-c p p") 'org2blog/wp-new-entry)
+  (setq org2blog/wp-show-post-in-browser nil)
+  (setq org2blog/wp-entry-mode-map
+	(let ((org2blog/wp-map (make-sparse-keymap)))
+	  (set-keymap-parent org2blog/wp-map org-mode-map)
+	  (define-key org2blog/wp-map [f5] 'org2blog/wp-post-buffer-and-publish)
+	  (define-key org2blog/wp-map [f7] 'org2blog/wp-post-buffer-as-page-and-publish)
+	  org2blog/wp-map))
 
   ;; org-capture
   (define-key global-map [(f8)] 'org-capture)
@@ -602,10 +612,16 @@ to find the text that grep hits refer to."
 ;; sln-mode
 
 ;;; bashdb: bash debugger
-;; usage: M-x bashdb
+;; usage: C-c p d b
 (autoload 'bashdb "bashdb" "BASH Debugger mode via GUD and bashdb" t)
-(global-set-key (kbd "C-c p a") 'bashdb)
+(global-set-key (kbd "C-c p d b") 'bashdb)
 ;; bashdb
+
+;;; pydb:
+;; usage: C-c p d y
+;;(if (not (require 'pydb nil t))
+;;  (message "[warn] feature 'pydb' not found!"))
+;; pydb
 
 ;;; misc-muse: muse
 ;; usage: M-x muse-mode
@@ -618,12 +634,6 @@ to find the text that grep hits refer to."
 ;;				    (find-file "~/.emacs.d/.tmp.muse")))))
 ;;(add-hook 'muse-mode-hook 'my-muse-hook)
 ;; misc-muse
-
-;;; pydb:
-;; usage: M-x pydb
-;;(if (not (require 'pydb nil t))
-;;  (message "[warn] feature 'pydb' not found!"))
-;; pydb
 
 ;;; pod-mode: perl pod document reader
 ;; usage: 
