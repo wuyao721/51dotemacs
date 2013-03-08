@@ -2,16 +2,16 @@
 
 ;; add semantic-add-system-include like these:
 ;(semantic-add-system-include "C:/Program Files/Microsoft Visual Studio/VC98/Include" 'c++-mode)
-;(semantic-add-system-include "D:/Program Files/Microsoft Visual Studio 8/VC98/Include" 'c++-mode))
-;(semantic-add-system-include "/usr/include" 'c++-mode))
+;(semantic-add-system-include "D:/Program Files/Microsoft Visual Studio 8/VC98/Include" 'c++-mode)
+;(semantic-add-system-include "/usr/include" 'c++-mode)
 
 ;; add semanticdb-project-roots like these:
 ;(add-to-list 'semanticdb-project-roots "/home/yao/project/Linux_0.5/service/include/")
 
 ;; add ede-cpp-root-project like these
-;(ede-cpp-root-project "webguard"
-;		      :name "webguard project"
-;		      :file "~/webguard/trunk/webguard.sln"
+;(ede-cpp-root-project "projectxxx"
+;		      :name "projectxxx project"
+;		      :file "~/projectxxx/trunk/projectxxx.sln"
 ;		      :include-path '("../include"
 ;				      "/include"
 ;				      "/WGM/include"

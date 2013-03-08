@@ -302,10 +302,9 @@
   (define-key c-mode-base-map [(f1)] 'cplusplus-grep-find)
   (define-key c-mode-base-map (kbd "<mouse-3>") 'cplusplus-quick-grep-find)
   (c-toggle-electric-state nil)
-  ;; (define-key c-mode-base-map [(f11)] 'hs-hide-block)
-  ;; (define-key c-mode-base-map [(f12)] 'hs-show-block)
-  ;; (define-key c-mode-base-map [(S-f11)] 'hs-hide-all)
-  ;; (define-key c-mode-base-map [(S-f12)] 'hs-show-all)
+  (define-key c-mode-base-map [(f12)] 'hs-toggle-hiding)
+  (define-key c-mode-base-map [f11] 'hs-hide-all)
+  (define-key c-mode-base-map [(S-f11)] 'hs-show-all)
   (setq c-macro-shrink-window-flag t)
   (setq c-macro-preprocessor "/lib/cpp -C");;use args '-C' to delete comment
   (setq c-macro-cppflags " ")
