@@ -1,12 +1,39 @@
-;;; 51dotemacs.el --- Display a tab bar in the header line
+;;; 51dotemacs --- wuyao's .emacs file
 
 ;; Copyright (C) 2011, 2012, 2013 WuYao
 
-;; Author: WuYao <wuyao721@163.com>
-;; Maintainer: WuYao <wuyao721@163.com>
+;; Author: wuyao721 <wuyao721@163.com>
 ;; Keywords: 51dotemacs
 
-;;; key binding
+;;; !!! Only support for emacs23 and emacs24. No test for emacs21 and emacs22 !!!
+;;; !!! Only support for windows and linux. !!!
+
+;;; extra feature support in this project 
+;; org2blog 
+;; redo
+;; recentf-ido-find-file
+;; dictionary
+;; shell-toggle
+;; multi-shell
+;; doxymacs
+;; xcscope
+;; msf-abbrev
+;; gnugo
+;; psvn 
+;; git-emacs
+;; magit
+;; protobuf-mode
+;; visual-basic-mode
+;; php-mode
+;; lua-mode
+;; sln-mode
+;; pod-mode
+;; bashdb
+;; gdb
+;; perldb
+;; pydb
+
+;;; wuyao's global key binding
 ;; [f4]                              kill-this-buffer
 ;; [f9]                              repeat
 ;; %                                 match-paren
@@ -30,33 +57,31 @@
 ;; C-c d l                           dictionary-lookup-definition
 ;; C-c d s                           dictionary-search
 ;; C-c d m                           dictionary-match-words
-;; C-c p a                           bashdb
-;; C-c p C                           calc
 ;; C-c p c                           compile
 ;; C-c p e                           eshell
-;; C-c p g                           gdb
 ;; C-c p i                           info
 ;; C-c p m                           mail
-;; C-c p p                           org2blog/wp-mode
-;; C-c p P                           org2blog/wp-new-entry
+;; C-c p p                           org2blog/wp-new-entry
 ;; C-c p r                           rot13-region
 ;; C-c p s                           shell-toggle-cd
 ;; C-c p t                           lambda
-;; C-c p v                           svn-status
+;; C-c p v s                         svn-status
+;; C-c p v g                         git-status
+;; C-c p v m                         magit-status
+;; C-c p d b                         bashdb
+;; C-c p d g                         gdb
+;; C-c p d p                         perldb
+;; C-c p d y                         pydb
 ;; C-c p w                           woman
 ;; C-c p 3                           w3m
 ;; C-x C-b                           ibuffer                               
-;; C-c C-j                           tabbar-forward-group
-;; C-c C-k                           tabbar-backward-group
-;; C-c C-h                           tabbar-backward-tab
-;; C-c C-l                           tabbar-forward-tab
 ;; C-x C-e                           eval-region
 ;; C-c M-d                           my-kill-word
 ;; C-c M-f                           my-forward-word
 ;; C-c M-w                           my-kill-ring-save
-;; C-<tab>                           tabbar-forward-tab
-;; C-S-<iso-lefttab>                 tabbar-backward-tab
-;; <C-S-tab>                         tabbar-backward-tab
+;; C-<tab>                           tabbar-forward-tab   (only in windows or X window)
+;; C-S-<iso-lefttab>                 tabbar-backward-tab  (only in windows or X window)
+;; <C-S-tab>                         tabbar-backward-tab  (only in windows or X window)
 ;; <wheel-down>                      lambda: scroll up 2 line
 ;; <wheel-up>                        lambda: scroll down 2 line
 ;; [mouse-4]                         lambda: scroll down 2 line
@@ -66,25 +91,26 @@
 
 (setq my-lisp-root "~/.emacs.d/elisp")
 
-;; set load-path
+;;; set load-path
+(add-to-list 'load-path (concat my-lisp-root "/" "org" ))
 (setq load-path
       (append load-path (list my-lisp-root 
 		    (concat my-lisp-root "/" "emacs-goodies-el")
 		    (concat my-lisp-root "/" "doxymacs" )
 		    (concat my-lisp-root "/" "dictionary")
 		    (concat my-lisp-root "/" "w3m-el-snapshot")
-		    (concat my-lisp-root "/" "muse")
 		    (concat my-lisp-root "/" "org2blog")
+		    (concat my-lisp-root "/" "magit")
+		    (concat my-lisp-root "/" "git-emacs")
 		    (concat my-lisp-root "/" "wubi"))))
 
-;; Appearance effects
+;;; Appearance effects
 ;; 
 (setq inhibit-startup-message t)                      ;forbid startup message
 (setq display-time-day-and-date t)                    ;day, date and time
 (display-time)                                        ;time on status bar
 (column-number-mode 1)                                ;column number on status bar
 (show-paren-mode 1)                                   ;show the corresponding parenthesis
-(menu-bar-mode 1)                                     ;remain menu bar
 (global-auto-revert-mode 1)			      ;auto revert
 (transient-mark-mode t)                               ;select text high light
 (global-font-lock-mode t)                             ;key word colorfull
@@ -121,13 +147,11 @@
 (global-set-key (kbd "C-c M-d") 'my-kill-word)
 (global-set-key (kbd "C-c M-f") 'my-forward-word)
 (global-set-key (kbd "C-c M-w") 'my-kill-ring-save)
-(global-set-key (kbd "C-c p C") 'calc)
 (global-set-key (kbd "C-c p e") 'eshell)
 (global-set-key (kbd "C-c p c") 'compile)
-(global-set-key (kbd "C-c p g") 'gdb)
+(global-set-key (kbd "C-c p d g") 'gdb)
 (global-set-key (kbd "C-c p i") 'info)
 (global-set-key (kbd "C-c p m") 'mail)
-;(global-set-key (kbd "C-c p p") 'perldb)
 (global-set-key (kbd "C-c p r") 'rot13-region)
 ;;(global-set-key (kbd "C-c p t") 'toggle-debug-on-error)
 (global-set-key (kbd "C-c p t") (function 
@@ -136,7 +160,7 @@
 (global-set-key (kbd "C-c p w") 'woman)
 (global-set-key (kbd "C-c p 3") 'w3m)
 
-;; Use Habit
+;;; Use Habit
 ;; 
 (setq hscroll-step 1)
 (setq scroll-conservatively 100000)
@@ -153,7 +177,7 @@
 ;;; setting difference from window-system 
 ;;
 (if (eq window-system nil)
-    t
+    (menu-bar-mode -1)                                  ;console not need menubar 
   (tool-bar-mode -1)                                    ;no tool bar
   (scroll-bar-mode 1)                                   ;remain scroll bar
   (set-scroll-bar-mode 'right)                          ;scroll bar on right
@@ -175,16 +199,12 @@
     (global-set-key (kbd "C-<tab>") 'tabbar-forward-tab)
     (global-set-key (kbd "C-S-<iso-lefttab>") 'tabbar-backward-tab)
     (global-set-key (kbd "<C-S-tab>") 'tabbar-backward-tab)
-    (global-set-key (kbd "C-c C-j") 'tabbar-forward-group)
-    (global-set-key (kbd "C-c C-k") 'tabbar-backward-group)
-    (global-set-key (kbd "C-c C-h") 'tabbar-backward-tab)
-    (global-set-key (kbd "C-c C-l") 'tabbar-forward-tab)
     (setq tabbar-buffer-groups-function (lambda () (list "All")))
     (tabbar-mode))
   ;; tabbar 
   )
 
-;; redo: Redo/undo system for Emacs
+;;; redo: Redo/undo system for Emacs
 ;; usage:    C-c r (or M-x redo)
 (autoload 'undo "redo" "undo" t)
 (autoload 'redo "redo" "redo" t)
@@ -192,10 +212,10 @@
 (global-set-key (kbd "C-c r") 'redo)
 ;; redo
 
-;; elpa: Emacs Lisp Package Archive
+;;; elpa: Emacs Lisp Package Archive
 ;; usage:    list-packages
 ;; xml-rpc
-(if (string-match "24." (emacs-version))
+(if (string-match "Emacs 24" (emacs-version))
     (if (not (require 'package nil t) )
 	(message "[warn] feature 'package' not found!")    
       (add-to-list 'package-archives 
@@ -204,21 +224,21 @@
       (package-initialize)))
 ;; elpa
 
-;; browse-kill-ring: browse kill ring and interactively insert items from kill-ring
+;;; browse-kill-ring: browse kill ring and interactively insert items from kill-ring
 ;; usage:    M-y (or M-x yank-pop)
 (if (not (require 'browse-kill-ring nil t) )
     (message "[warn] feature 'browse-kill-ring' not found!")    
   (browse-kill-ring-default-keybindings))
 ;; browse-kill-ring
 
-;; unique: unique buffer name(guard duplication of buffer name)
+;;; unique: unique buffer name(guard duplication of buffer name)
 ;; usage:    auto
 (if (not (require 'uniquify nil t))
     (message "[warn] feature 'uniquify' not found!")
   (setq uniquify-buffer-name-style 'forward))  
 ;; unique
 
-;; dired: files(or directories) explorer
+;;; dired: files(or directories) explorer
 ;; usage: C-c j (or M-x dired-jump)
 (if (not (require 'dired nil t))
     (message "[warn] feature 'dired' not found!")
@@ -264,7 +284,7 @@
   )
 ;; dired
 
-;; view-mode: 
+;;; view-mode: 
 (global-set-key (kbd "<escape>") (function
 				    (lambda nil (interactive) (view-mode 1))))
 (autoload 'view-mode "view" "view mode" t)
@@ -282,15 +302,14 @@
 (add-hook 'view-mode-hook 'my-view-mode-hook)
 ;; view-mode
 
-;; imenu: 
+;;; imenu: 
 (add-hook 'font-lock-mode-hook
 	  (lambda () (condition-case nil (imenu-add-menubar-index) (error nil))))
 ;; imenu
 
-;; c-mode: c-mode hook
+;;; c-mode: c-mode hook
 ;; usage:    just open the files
 (defun my-c-mode-common-hook()
-  "ÎÒµÄC/C++ÓïÑÔ±à¼­²ßÂÔ"
   ;;(define-key c-mode-base-map [(f1)] 'next-error)
   ;;(define-key c-mode-base-map [(f2)] 'previous-error)
 
@@ -327,7 +346,7 @@
 (add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
 ;; c-mode
 
-;; gud 
+;;; gud 
 (defun define-c-mode-fn-key-debug ()
   (define-key c-mode-base-map (kbd "<f5>") 'gud-go)
   (define-key c-mode-base-map (kbd "<f10>") 'gud-step)
@@ -349,7 +368,7 @@
       (list 'gdb-mode-hook 'gud-mode-hook))
 ;; gud
 
-;; ctypes
+;;; ctypes
 ;; function: 
 ;; usage:    
 (if (not (require 'ctypes nil t))
@@ -357,7 +376,7 @@
   (ctypes-auto-parse-mode 1))  ;auto realize C language typedef type
 ;; ctypes
 
-;; yasnippet: template system for Emacs, automatically expand 
+;;; yasnippet: template system for Emacs, automatically expand 
 ;; usage: press [TAB]
 (if (not (require 'yasnippet nil t))
     (message "[warn] feature 'yasnippet' not found!")
@@ -366,13 +385,13 @@
   (yas/global-mode))
 ;; yasnippet
 
-;; tramp-hack : open secure remote file
+;;; tramp-hack : open secure remote file
 ;; usage: C-x C-f /su:root@localhost:/etc or (/su::/etc)
 (if (not (require 'tramp-hack nil t))
     (message "[warn] feature 'tramp-hack' not found!"))
 ;; tramp-hack
 
-;; misc-goodies: 
+;;; misc-goodies: 
 ;; usage:    
 (if (not (require 'misc-goodies nil t))
     (message "[warn] feature 'misc-goodies' not found!")
@@ -382,20 +401,59 @@
   )
 ;; misc-goodies
 
-;; misc-org: 
+;;; org-mode: 
 ;; usage:    
-(if (not (and (require 'org nil t) (require 'org-latex nil t)))
+(if (not (require 'org nil t))
     (message "[warn] feature 'org' not found!")
-  (require 'misc-org nil t))
-;; misc-goodies
 
-;; misc-menu
+  ;; org2blog
+  (autoload 'org2blog/wp-mode "org2blog" "Toggle org2blog/wp mode." t)
+  (autoload 'org2blog/wp-new-entry "org2blog" "Creates a new blog entry." t)
+  (add-hook 'org-mode-hook (lambda () 
+			     (setq truncate-lines nil) 
+			     (org2blog/wp-mode)))
+  (global-set-key (kbd "C-c p p") 'org2blog/wp-new-entry)
+  (setq org2blog/wp-show-post-in-browser nil)
+  (setq org2blog/wp-entry-mode-map
+	(let ((org2blog/wp-map (make-sparse-keymap)))
+	  (set-keymap-parent org2blog/wp-map org-mode-map)
+	  (define-key org2blog/wp-map [f5] 'org2blog/wp-post-buffer-and-publish)
+	  (define-key org2blog/wp-map [f7] 'org2blog/wp-post-buffer-as-page-and-publish)
+	  org2blog/wp-map))
+
+  ;; org-capture
+  (define-key global-map [(f8)] 'org-capture)
+  (setq org-capture-templates
+	`(("t" "Todo" entry (file+headline "~/capture/todo.org" "Tasks")
+	   "* TODO %?\n  %i" :prepend t)
+	  
+	  ("n" "Note" entry (file+headline "~/capture/notes.org" "Notes")
+	   "* %U %?\n\n  %i" :prepend t :empty-lines 1)
+
+	  ;; ...
+
+	  ("p" "project" table-line
+	   (file+headline "~/capture/project.org" "mine project")
+	   "| %? | | %a |")
+	  
+	  ("P" "Project" table-line
+	   (file+headline "~/capture/project.org" "external project")
+	   "| %? | | %a |")
+
+	  ("a" "Account" table-line
+	   (file+headline "~/capture/.account.org" "Web accounts")
+	   "| %? | | %a | %U |")))
+  (require 'org-latex-hack nil t)
+  )
+;; org-mode
+
+;;; misc-menu
 ;; usage:    
 (if (not (require 'misc-menu nil t))
     (message "[warn] feature 'misc-menu' not found!"))
 ;; misc-menu
 
-;; highlight-symbol
+;;; highlight-symbol
 ;; usage:    
 (if (not (require 'highlight-symbol nil t))
     (message "[warn] feature 'highlight-symbol' not found!")
@@ -408,7 +466,7 @@
   (global-set-key [(control meta f3)] 'highlight-symbol-query-replace))
 ;; highlight-symbol
 
-;; doxymacs: quick insert comment
+;;; doxymacs: quick insert comment
 ;; usage:    M-x doxymacs-...
 (autoload 'doxymacs-insert-file-comment "doxymacs" "doxymacs-insert-file-comment" t)
 (autoload 'doxymacs-insert-function-comment "doxymacs" "doxymacs-insert-function-comment" t)
@@ -416,26 +474,26 @@
 (autoload 'doxymacs-insert-multiline-comment "doxymacs" "doxymacs-insert-multiline-comment" t)
 ;; doxymacs
 
-;; protobuf: protobuf mode
+;;; protobuf: protobuf mode
 ;; usage:    bind to .proto files
 (setq auto-mode-alist (cons '("\\.proto$"  . protobuf-mode) auto-mode-alist))
 (autoload 'protobuf-mode "protobuf-mode" "edit google protobuf files use emacs" t)
 ;; protobuf
 
-;; php: php mode
+;;; php: php mode
 ;; usage:    bind to .php files
 (setq auto-mode-alist (cons '("\\.php$"  . php-mode) auto-mode-alist))
 (autoload 'php-mode "php-mode" "edit php files use emacs" t)
 ;; php
 
-;; vb: vb mode
+;;; vb: vb mode
 ;; usage:    bind to .frm files
 (autoload 'visual-basic-mode "visual-basic-mode" "Visual Basic mode." t)
 (setq auto-mode-alist (append '(("\\.\\(frm\\|bas\\|cls\\)$" .
 				 visual-basic-mode)) auto-mode-alist))
 ;; vb
 
-;; grep: 
+;;; grep: 
 (global-set-key (kbd "C-c g") 'grep-find)
 (global-set-key (kbd "C-c G") 'cplusplus-grep-find)
 (global-set-key (kbd "C-c t") 'grep-find-replace)
@@ -443,18 +501,30 @@
 (setq grep-find-command "find . -name '*' -type f -print0 | xargs -0 -e grep -nH -e ")
 ;; grep 
 
-;; psvn: subversion interface for emacs
+;;; git-emacs: git interface for emacs
+;; usage:    M-x git-status
+(global-set-key (kbd "C-c p v g") 'git-status)
+(autoload 'git-status "git-status" "git interface for emacs" t)
+;; git-emacs
+
+;;; magit-emacs: git interface for emacs
+;; usage:    M-x magit-status
+(global-set-key (kbd "C-c p v m") 'magit-status)
+(autoload 'magit-status "magit" "git interface for emacs" t)
+;; git-emacs
+
+;;; psvn: subversion interface for emacs
 ;; usage:    M-x svn-status
-(global-set-key (kbd "C-c p v") 'svn-status)
+(global-set-key (kbd "C-c p v s") 'svn-status)
 (autoload 'svn-status "psvn" "subversion interface for emacs" t)
 ;; psvn
 
-;; w3m: web explorer
+;;; w3m: web explorer
 ;; usage:    C-c p 3 (or M-x w3m)
 (autoload 'w3m "w3m" "w3m" t)
 ;; w3m
 
-;; dictionary: dictionary client and utils
+;;; dictionary: dictionary client and utils
 ;; usage:    C-c s d (or M-x dictionary-search)
 (setq dictionary-server "localhost")                  ;choose a dictionary server, or "www.dict.org"
 (autoload 'dictionary-search "dictionary" "dictionary-search" t)
@@ -465,32 +535,20 @@
 (global-set-key (kbd "C-c d m") 'dictionary-match-words)
 ;; dictionary
 
-;; sr-speedbar: single frame speedbar
+;;; sr-speedbar: single frame speedbar
 ;;(if (not (require 'sr-speedbar nil t))
 ;;    (message "[warn] feature 'sr-speedbar' not found!")
 ;;  (global-set-key (kbd "C-c p t") 'sr-speedbar-toggle))
 ;; sr-speedbar
 
-;; mail: send textual mail, and no attachment
-;; usage:    M-x mail
-(setq send-mail-function 'smtpmail-send-it) ; if you use `mail'
-(setq smtpmail-auth-credentials
-      '(("smtp.163.com"			;SMTP server name
-	 25
-	 "wuyao721"           		;user name
-	 nil)))                         ;password, ask whem use if nil
-(setq smtpmail-default-smtp-server "smtp.163.com")
-(setq smtpmail-smtp-server "smtp.163.com")
-;; mail
-
-;; shell-toggle: quick to shell
+;;; shell-toggle: quick to shell
 ;; usage:    C-c p s (or M-x shell-toggle)
 (if (not (require 'shell-toggle nil t))
     (message "[warn] feature 'shell-toggle' not found!")
   (global-set-key (kbd "C-c p s") 'shell-toggle-cd))
 ;; shell-toggle
 
-;; multi-shell: multi shell
+;;; multi-shell: multi shell
 ;; usage:    C-c p n (or M-x multi-shell-new)
 (autoload 'multi-shell-new "multi-shell" "multi-shell-new" t)
 (setq multi-shell-buffer-name "shell")
@@ -509,7 +567,7 @@
 ;;					      (setq multi-shell-command temp-multi-shell-command))))
 ;;  ) 
 
-;; xcscope: easily search for where symbols are used and defined.
+;;; xcscope: easily search for where symbols are used and defined.
 ;; usage:    C-c s (prefix key sequence)
 (if (not (require 'xcscope nil t))
     (message "[warn] feature 'xcscope' not found!"))
@@ -523,7 +581,7 @@
       auto-mode-alist (cons '("\\.sawfish/rc$" . sawfish-mode) auto-mode-alist))
 ;; sawfish
 
-;; lua: lua mode
+;;; lua: lua mode
 ;; usage:    just open the files
 (autoload 'lua-mode "lua-mode" "lua-mode" t)
 (setq auto-mode-alist (cons '("\\.lua" . lua-mode) auto-mode-alist))
@@ -541,7 +599,7 @@ to find the text that grep hits refer to."
 	    (define-key lua-mode-map [(f5)] 'find-sln)))
 ;; lua
 
-;; sln-mode: MS sln
+;;; sln-mode: MS sln
 ;; usage: M-x find-sln
 (autoload 'find-sln "sln-mode")
 (global-set-key (kbd "C-c p f") 'find-sln)
@@ -552,13 +610,19 @@ to find the text that grep hits refer to."
        (project-buffer-mode-p-setup))))
 ;; sln-mode
 
-;; bashdb: bash debugger
-;; usage: M-x bashdb
+;;; bashdb: bash debugger
+;; usage: C-c p d b
 (autoload 'bashdb "bashdb" "BASH Debugger mode via GUD and bashdb" t)
-(global-set-key (kbd "C-c p a") 'bashdb)
+(global-set-key (kbd "C-c p d b") 'bashdb)
 ;; bashdb
 
-;; misc-muse: muse
+;;; pydb:
+;; usage: C-c p d y
+;;(if (not (require 'pydb nil t))
+;;  (message "[warn] feature 'pydb' not found!"))
+;; pydb
+
+;;; misc-muse: muse
 ;; usage: M-x muse-mode
 (autoload 'muse-mode "misc-muse" "muse-mode" t)
 (setq auto-mode-alist (cons '("\\.muse$"  . muse-mode) auto-mode-alist))
@@ -570,20 +634,14 @@ to find the text that grep hits refer to."
 ;;(add-hook 'muse-mode-hook 'my-muse-hook)
 ;; misc-muse
 
-;; pydb:
-;; usage: M-x pydb
-;;(if (not (require 'pydb nil t))
-;;  (message "[warn] feature 'pydb' not found!"))
-;; pydb
-
-;; pod-mode: perl pod document reader
+;;; pod-mode: perl pod document reader
 ;; usage: 
 (autoload 'pod-mode "pod-mode" "pod-mode" t)
 (setq auto-mode-alist (cons '("\\.pod$"  . pod-mode) auto-mode-alist))
 (add-hook 'pod-mode-hook 'font-lock-mode)
 ;; pod-mode
 
-;; msf-abbrev
+;;; msf-abbrev
 ;; usage: 
 (if (not (require 'msf-abbrev nil t))
     (message "[warn] feature 'msf-abbrev' not found!")
@@ -593,7 +651,7 @@ to find the text that grep hits refer to."
   (global-set-key (kbd "C-c a") 'msf-cmd-define))
 ;; msf-abbrev
 
-;; gnugo: game of I-GO
+;;; gnugo: game of I-GO
 ;; usage: M-x gnugo
 (autoload 'gnugo "gnugo" "GNUGO" t)
 ;; gnugo
@@ -603,7 +661,7 @@ to find the text that grep hits refer to."
 
 ;; at last restore files, command history, kill-ring, and so on.
 
-;; recentf: quick access for recent open file
+;;; recentf: quick access for recent open file
 ;; usage:    C-c o (or M-x recentfopen)
 ;;(require 'cl-seq)
 ;;(require 'cl)
@@ -637,20 +695,20 @@ to find the text that grep hits refer to."
 ;;quick access for recent open file
 ;; recentf
 
-;; c#: http://code.google.com/p/csharpmode
+;;; c#: http://code.google.com/p/csharpmode
 ;; usage: 
 (autoload 'csharp-mode "csharp-mode" "Major mode for editing C# code." t)
 (setq auto-mode-alist
       (append '(("\\.cs$" . csharp-mode)) auto-mode-alist))
 ;; c#
 
-;; apt: apt-get apt-cache apt-file dpkg
+;;; apt: apt-get apt-cache apt-file dpkg
 ;; usage: 
 ;;(if (not (require 'apt nil t))
 ;;    (message "[warn] feature 'apt' not found!"))
 ;; apt
 
-;; cedet: Emacs Development Tools
+;;; cedet: Emacs Development Tools
 ;; usage: M-x my-load-cedet
 ;(defvar my-cedet-loaded nil)
 ;(defun my-load-cedet ()
@@ -685,14 +743,14 @@ to find the text that grep hits refer to."
   (local-set-key [S-f12] 'semantic-decoration-include-visit))
 ;; cedet
 
-;; session: remember kill-ring, command history
+;;; session: remember kill-ring, command history
 ;; usage:    auto
 (if (not (require 'session nil t))
     (message "[warn] feature 'session' not found!")
   (add-hook 'after-init-hook 'session-initialize))
 ;; session
 
-;; evernote-mode: online note book
+;;; evernote-mode: online note book
 ;; usage:    C-c e b
 (autoload 'evernote-browser "evernote-mode" "evernote-mode" t)
 (autoload 'evernote-open-note "evernote-mode" "evernote-mode" t)
@@ -708,68 +766,34 @@ to find the text that grep hits refer to."
 (global-set-key "\C-cep" 'evernote-post-region)
 ;; evernote-mode
 
-;; org2blog
-(if (not (require 'org2blog-autoloads nil t))
-    (message "[warn] feature 'org2blog-autoloads' not found!")
-  (global-set-key (kbd "C-c p p") 'org2blog/wp-mode)
-  (global-set-key (kbd "C-c p P") 'org2blog/wp-new-entry)
-
-  (setq org2blog/wp-entry-mode-map
-	(let ((org2blog/wp-map (make-sparse-keymap)))
-	  (set-keymap-parent org2blog/wp-map org-mode-map)
-	  (define-key org2blog/wp-map (kbd "C-c C-c") 'org2blog/wp-post-buffer-and-publish)
-	  (define-key org2blog/wp-map (kbd "C-c C-k") 'org2blog/wp-delete-entry)
-	  org2blog/wp-map))
-
-  (setq org2blog/wp-blog-alist
-	'(("wuyao721"
-	   :url "http://www.wuyao721.com/xmlrpc.php"
-	   :username "wuyao721"
-	   :keep-new-lines t
-	   :confirm t
-	   :wp-code nil
-	   :tags-as-categories nil)))
-
-  (setq org2blog/wp-buffer-template
-	"#+DATE: %s
-#+OPTIONS: toc:nil num:nil todo:nil pri:nil tags:nil ^:nil TeX:nil 
-#+CATEGORY: 
-#+TAGS: 
-#+PERMALINK: 
-#+TITLE:
-\n")
-  )
-
-;; org2blog
-
-;; desktop: remember opened files for next time run emacs
+;;; desktop: remember opened files for next time run emacs
 ;; usage:    auto
-;(if (not (require 'desktop nil t))
-;    (message "[warn] feature 'desktop' not found!")
-;  (setq desktop-base-file-name ".desktop.el")             ;desktop file name
-;  ;;(setq desktop-dirname (shell-command-to-string "echo -n ${HOME}/"))
-;  (add-to-list 'desktop-modes-not-to-save 'Info-mode)
-;  (add-to-list 'desktop-modes-not-to-save 'info-lookup-mode)
-;  (if (>= emacs-major-version 22) 
-;      (desktop-save-mode 1)
-;    (desktop-load-default)
-;    (desktop-read)
-;    (setq desktop-enable t)))
-;; desktop
+;;(if (not (require 'desktop nil t))
+;;    (message "[warn] feature 'desktop' not found!")
+;;  (setq desktop-base-file-name ".desktop.el")             ;desktop file name
+;;  ;;(setq desktop-dirname (shell-command-to-string "echo -n ${HOME}/"))
+;;  (add-to-list 'desktop-modes-not-to-save 'Info-mode)
+;;  (add-to-list 'desktop-modes-not-to-save 'info-lookup-mode)
+;;  (if (>= emacs-major-version 22) 
+;;      (desktop-save-mode 1)
+;;    (desktop-load-default)
+;;    (desktop-read)
+;;    (setq desktop-enable t)))
+;;; desktop
 
-(set-frame-size (selected-frame) 80 20)
+;;(set-frame-size (selected-frame) 80 20)
 
 (if (not (eq system-type 'windows-nt))
     (global-set-key [f11] 'my-toggle-fullscreen)
   (global-set-key [f11] 'w32-fullscreen)
   (autoload 'w32-fullscreen "w32-fullscreen"))
 
-;; set enviroment 
+;;; set enviroment 
 (if (not (require 'env-platform nil t))
     (message "[warn] feature 'env-platform' not found!"))
 
-;; emacs server: remember opened files for next time run emacs
+;;; emacs server: remember opened files for next time run emacs
 ;; usage:    emacsclient ...
 (if (eq system-type 'windows-nt)
     (server-start)) 
-;; emacs server 2
+;; emacs server 
