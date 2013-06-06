@@ -102,6 +102,7 @@
 		    (concat my-lisp-root "/" "org2blog")
 		    (concat my-lisp-root "/" "magit")
 		    (concat my-lisp-root "/" "git-emacs")
+		    (concat my-lisp-root "/" "w32")
 		    (concat my-lisp-root "/" "wubi"))))
 
 ;;; Appearance effects
@@ -581,6 +582,18 @@
       auto-mode-alist (cons '("\\.sawfish/rc$" . sawfish-mode) auto-mode-alist))
 ;; sawfish
 
+;; web-mode: major mode for editing HTML templates
+;; usage:    just open the files
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.jsp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+;; web-mode
+
 ;;; lua: lua mode
 ;; usage:    just open the files
 (autoload 'lua-mode "lua-mode" "lua-mode" t)
@@ -609,6 +622,12 @@ to find the text that grep hits refer to."
       (message "[warn] feature 'project-buffer-mode+' not found!")
        (project-buffer-mode-p-setup))))
 ;; sln-mode
+
+;;; cmd-mode: MS sln
+(autoload 'cmd-mode "cmd-mode" "CMD mode." t)
+(setq auto-mode-alist (append '(("\\.\\(cmd\\|bat\\)$" . cmd-mode))
+                              auto-mode-alist))
+;; cmd-mode
 
 ;;; bashdb: bash debugger
 ;; usage: C-c p d b
