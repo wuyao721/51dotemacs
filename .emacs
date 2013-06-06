@@ -26,6 +26,8 @@
 ;; visual-basic-mode
 ;; php-mode
 ;; lua-mode
+;; web-mode
+;; cmd-mode
 ;; sln-mode
 ;; pod-mode
 ;; bashdb
@@ -102,7 +104,7 @@
 		    (concat my-lisp-root "/" "org2blog")
 		    (concat my-lisp-root "/" "magit")
 		    (concat my-lisp-root "/" "git-emacs")
-		    (concat my-lisp-root "/" "w32")
+		    (concat my-lisp-root "/" "emacsw32")
 		    (concat my-lisp-root "/" "wubi"))))
 
 ;;; Appearance effects
@@ -520,7 +522,7 @@
 (autoload 'svn-status "psvn" "subversion interface for emacs" t)
 ;; psvn
 
-;;; w3m: web explorer
+;;; w3m: 
 ;; usage:    C-c p 3 (or M-x w3m)
 (autoload 'w3m "w3m" "w3m" t)
 ;; w3m
@@ -623,7 +625,7 @@ to find the text that grep hits refer to."
        (project-buffer-mode-p-setup))))
 ;; sln-mode
 
-;;; cmd-mode: MS sln
+;;; cmd-mode: windows batch file
 (autoload 'cmd-mode "cmd-mode" "CMD mode." t)
 (setq auto-mode-alist (append '(("\\.\\(cmd\\|bat\\)$" . cmd-mode))
                               auto-mode-alist))

@@ -4,14 +4,15 @@
 
 ;; Author:     Lennart Borgman <lennart DOT borgman DOT 073 AT student DOT lu DOT se>
 ;; Created: 2005-08-03
+;; Modified by: wuyao721@163.com 2013-06-06
 ;; Version: 0.87
 ;; Last-Updated: 2008-01-21T20:21:32+0100 Mon
 ;; Keywords: convenience emulations w32
 ;; Features that might be required by this library:
 ;;
-;;   `cl', `compile', `electric', `emacsw32-eol', `find-func',
-;;   `grep', `hfyview', `menuacc', `noprint', `nxhtml-loader',
-;;   `rebind', `swbuff', `swbuff-y', `timer', `tmm', `w32-grep',
+;;   `cl', `compile', `electric', `find-func',
+;;   `grep', `hfyview', `menuacc', `noprint',
+;;   ``timer', `tmm', `w32-grep',
 ;;   `w32-integ', `w32-meta', `w32shell'.
 ;;
 ;; This file does not do very much by itself, it serves more as a hub
@@ -29,14 +30,6 @@
 ;; of your .emacs (or in default.el):
 ;;
 ;;    (require 'emacsw32)
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;;; History:
-;;
-
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -58,26 +51,9 @@
 ;; to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ;; Floor, Boston, MA 02110-1301, USA.
 
-;; Add the util dir here in case nxhtml is not used:
-(let* ((this-dir (file-name-directory
-                  (if load-file-name load-file-name buffer-file-name)))
-       (util-dir (file-name-as-directory
-                      (expand-file-name "../nxml/util"
-                                    this-dir)))
-       )
-  (unless (file-directory-p util-dir)
-    (error "Emacsw32 load error: Can't find %s" util-dir))
-  (add-to-list 'load-path util-dir))
 
-
-(require 'swbuff-y nil t)
-(require 'emacsw32-eol nil t)
-(require 'nxhtml-loader nil t)
 (require 'noprint nil t) ;; For removing default print entries
-(require 'hfyview nil t)
-(require 'rebind) ;; Keys rebinding
 (require 'w32-grep)
-
 
 (defun emacsw32-get-version ()
   (let ((auto-updated-version "1.56 2008-03-23"))
@@ -98,43 +74,16 @@ Those options are collected here for your convenience."
   :group 'convenience
   :group 'environment
   )
-(defgroup emacsw32-buffer nil
-  "Simple buffer switching using swbuff-y."
-  :tag "Buffer switching"
-  :group 'emacsw32
-  )
-(defgroup emacsw32-install nil
-  "Installation related options"
-  :tag "W32 Installation"
-  :group 'emacsw32
-  )
 
 ;; Add to EmacsW32 group:
 (custom-add-to-group 'emacsw32 'cua-mode        'custom-variable)
 (custom-add-to-group 'emacsw32 'recentf-mode    'custom-variable)
 
-
-
-
-
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;; Specific to MS Window
 (when (eq system-type 'windows-nt)
-
-  (defun emacsw32-is-patched ()
-    "Return t if this is the patched version, otherwise nil.
-This function only checks if it is the patched version of
-Emacs+EmacsW32 that is used. It knows nothing about other
-patches."
-    (fboundp 'w32-wh-keyboard-ll))
-
   (require 'w32shell nil t)
   (require 'w32-integ nil t)
-  (when (emacsw32-is-patched)
-    (require 'menuacc)
-    (require 'w32-meta))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; These are the keys for the w32-send-sys-command
@@ -231,21 +180,6 @@ would call a window in MS Windows."
                (setq frame-title-format emacsw32-old-frame-title-format)))))
   :group 'emacsw32)
 
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;;;; The rest is for the emacsw32 mode:
-
-;; (defun emacsw32-kb-vec (char ctrl shft meta)
-;;   (unless (< 31 char)
-;;     (error "Char should be greater than 31 to avoid confusion"))
-;;   (let ((l (list char)))
-;;     (when ctrl (setq l (cons 'control l)))
-;;     (when shft (setq l (cons 'shift l)))
-;;     (when meta (setq l (cons 'meta l)))
-;;     (vector l)))
-
 (defvar emacsw32-mode-map (make-sparse-keymap))
 
 ;; (defun emacsw32-find-file ()
@@ -326,51 +260,29 @@ would call a window in MS Windows."
 ;;   :group 'emacsw32
 ;;   )
 
-
-
 (defun emacsw32-add-menus ()
   (when (featurep 'w32shell)
     (let ((k (make-sparse-keymap)))
-      (define-key k [explorer-file] '("Explorer with Current &File" . w32shell-explorer-current-file))
-      (define-key k [explorer] '("&Explorer Here" . w32shell-explorer-here))
-      (define-key k [cmd] '("Command &Prompt Here" . w32shell-cmd-here))
-      (define-key k [divider] '("--"))
-      (define-key k [msys-shell]
-        (list 'menu-item "&MSYS Shell" 'msys-shell
-              :help-echo "Run MSYS in a shell buffer"))
-      (define-key k [cygwin-shell]
-        (list 'menu-item "C&ygwin Shell" 'cygwin-shell
-              :help-echo "Run Cygwin in a shell buffer"))
-      (define-key k [cmd-shell]
-        (list 'menu-item "&Cmd Shell" 'cmd-shell
-              :help-echo "Run Windows Command Prompt in a shell buffer"))
-      (define-key-after menu-bar-tools-menu [someshell] (list 'menu-item "W&32 Shells" k) 'shell-on-region)))
-  (define-key menu-bar-help-menu [emacsw32-sep1] '("--"))
-  (define-key menu-bar-help-menu [emacsw32-help]
-    (cons "EmacsW&32 Introduction" 'emacsw32-show-doc))
-  (define-key-after menu-bar-options-menu [emacsw32-customize]
-    (cons (concat "Customize EmacsW&32 (" (emacsw32-get-version) ") ...")
-          'emacsw32-show-custstart)))
+      (define-key k [explorer-file] '("Explorer with Current File" . w32shell-explorer-current-file))
+      (define-key k [explorer] '("Explorer Here" . w32shell-explorer-here))
+      (define-key k [cmd] '("Command Prompt Here" . w32shell-cmd-here))
+      ;;(define-key k [divider] '("--"))
+      ;;(define-key k [msys-shell]
+      ;;  (list 'menu-item "MSYS Shell" 'msys-shell
+      ;;        :help-echo "Run MSYS in a shell buffer"))
+      ;;(define-key k [cygwin-shell]
+      ;;  (list 'menu-item "Cygwin Shell" 'cygwin-shell
+      ;;        :help-echo "Run Cygwin in a shell buffer"))
+      ;;(define-key k [cmd-shell]
+      ;;  (list 'menu-item "Cmd Shell" 'cmd-shell
+      ;;        :help-echo "Run Windows Command Prompt in a shell buffer"))
+      (define-key-after menu-bar-tools-menu [someshell] (list 'menu-item "Emacsw32 Shells" k) 'shell-on-region))))
 
 (defun emacsw32-show-custstart ()
   "Show start page for emacsw32 customization."
   (interactive)
   (require 'emacsw32-custom)
   (emacsw32-custom-start))
-
-
-(defconst emacsw32-doc-file
-  (convert-standard-filename
-   (expand-file-name (concat
-                      exec-directory
-                      "../../EmacsW32/etc/EmacsW32Util.html"))))
-(defun emacsw32-show-doc ()
-  "Ask Explorer to show emacsw32.el HTML documentation."
-  (interactive)
-  (if (file-exists-p emacsw32-doc-file)
-      (browse-url-of-file emacsw32-doc-file)
-    (message "Can't find file %s" emacsw32-doc-file)))
-
 
 (defun emacsw32-r-short-file-name (begin end)
   "Replace long w32 file name in region with short dito."
@@ -395,7 +307,6 @@ would call a window in MS Windows."
 ;; Todo: Changing menus here does not adhere to Emacs standard but I
 ;; think these small changes are ok and useful.
 (emacsw32-add-menus)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;; Ready:
