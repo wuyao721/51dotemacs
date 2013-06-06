@@ -50,9 +50,6 @@
 ;; Free Software Foundation's website http://www.fsf.org/.  Or, write
 ;; to the Free Software Foundation, Inc., 51 Franklin Street, Fifth
 ;; Floor, Boston, MA 02110-1301, USA.
-
-
-(require 'noprint nil t) ;; For removing default print entries
 (require 'w32-grep)
 
 (defun emacsw32-get-version ()
@@ -108,7 +105,6 @@ Those options are collected here for your convenience."
   ;;SC_MONITORPOWER 0xF170
   ;;SC_CONTEXTHELP 0xF180
   ;;SC_SEPARATOR 0xF00F
-
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Frame w32 handling
@@ -180,133 +176,12 @@ would call a window in MS Windows."
                (setq frame-title-format emacsw32-old-frame-title-format)))))
   :group 'emacsw32)
 
-(defvar emacsw32-mode-map (make-sparse-keymap))
-
 ;; (defun emacsw32-find-file ()
 ;;   (interactive)
 ;;   (let ((last-nonmenu-event nil)
 ;;         (use-dialog-box t)
 ;;         (use-file-dialog t))
 ;;     (call-interactively 'find-file)))
-
-;; (lookup-key global-map (ks-to-vec (kbd "C-x k")))
-;; (key-description (ks-set-mod (kbd "C-x a C-b") '(control meta)))
-;; (key-description (ks-set-mod "\C-xa\C-b" '(control meta)))
-
-
-
-;; (define-minor-mode emacsw32-mode
-;;   "Toggles or sets emacsw32 mode.
-;; ARG: if omitted toggle mode, if nil turns off, otherwise sets the
-;; mode.
-
-;; emacsw32 mode is an Emacs minor mode that add some keyboard keys
-;; common to most MS Windows programs.  Please see EmacsW32Util.html
-;; for more information. On w32 you can find this in the menus:
-
-;;   Help - EmacsW32 Introduction.
-
-;; See also url `http://OurComments.org/Emacs/EmacsW32.html'."
-
-;;   nil ;; Initial value
-;;   " w32" ;; Lighter
-
-;;   ;;;;;;;;;; emacsw32 minor mode keymap
-;;   ;;vb:
-;;   ;; F6 other-window?
-;;   ;; C-R project explorer => speedbar?
-;;   ;; F4 Prop-window?
-;;   ;; Tab indent line or selected
-;;   ;;outlook:
-;;   ;; S-M-Esc other-window?
-;;   ;; F6 other-window
-;;   ;; S-F6 other window (backwards)
-;;   ;; M-F4 close-window
-;;   ;; C-S-S speedbar (like C-S-I for inbox)?
-;;   ;; Esc cancel?
-;;   ;; C-Tab other-window?
-;;   ;;Notepad, IE, etc:
-;;   ;; C-A select all
-
-;; ;;   '(
-;; ;;     ;; Common MS Windows keys
-;; ;;     ('[(control ?a)] . mark-whole-buffer)
-;; ;; ;;     ('[f6] . other-window)
-;; ;; ;;     ('[A-f4] . emacsw32-simulate-alt-f4)
-;; ;; ;;     ('[M-f4] . emacsw32-simulate-alt-f4)
-
-;; ;;     ;; Some mnemonics alluding to A-f4
-;; ;; ;;     ('[f4]     . delete-window)
-
-;; ;;     ;; Savers for M- keys usually defined in Emacs:
-;; ;; ;;     ('[C-A-backspace] . backward-kill-sexp)
-;; ;; ;;     ('[C-A-delete]    . backward-kill-sexp)
-;; ;; ;;     ('[A-left]    . backward-word)
-;; ;; ;;     ('[A-right]   . forward-word)
-;; ;; ;;     ('[A-begin]   . beginning-of-buffer-other-window)
-;; ;; ;;     ('[A-end]     .       end-of-buffer-other-window)
-;; ;; ;;     ('[A-prior]   . scroll-other-window-down)
-;; ;; ;;     ('[A-next]    . scroll-other-window)
-;; ;; ;;     ('[A-home]    . beginning-of-buffer-other-window)
-;; ;;     ;;;; The following two are not useful on MS Windows:
-;; ;;     ;;('[A-esc-esc] . keyboard-escape-quit)
-;; ;;     ;;('[A-esc-?:]  . eval-expression)
-
-;; ;;     )
-
-;;   ;; Body
-;;   :keymap 'emacsw32-mode-map
-;;   :global t
-;;   :group 'emacsw32
-;;   )
-
-(defun emacsw32-add-menus ()
-  (when (featurep 'w32shell)
-    (let ((k (make-sparse-keymap)))
-      (define-key k [explorer-file] '("Explorer with Current File" . w32shell-explorer-current-file))
-      (define-key k [explorer] '("Explorer Here" . w32shell-explorer-here))
-      (define-key k [cmd] '("Command Prompt Here" . w32shell-cmd-here))
-      ;;(define-key k [divider] '("--"))
-      ;;(define-key k [msys-shell]
-      ;;  (list 'menu-item "MSYS Shell" 'msys-shell
-      ;;        :help-echo "Run MSYS in a shell buffer"))
-      ;;(define-key k [cygwin-shell]
-      ;;  (list 'menu-item "Cygwin Shell" 'cygwin-shell
-      ;;        :help-echo "Run Cygwin in a shell buffer"))
-      ;;(define-key k [cmd-shell]
-      ;;  (list 'menu-item "Cmd Shell" 'cmd-shell
-      ;;        :help-echo "Run Windows Command Prompt in a shell buffer"))
-      (define-key-after menu-bar-tools-menu [someshell] (list 'menu-item "Emacsw32 Shells" k) 'shell-on-region))))
-
-(defun emacsw32-show-custstart ()
-  "Show start page for emacsw32 customization."
-  (interactive)
-  (require 'emacsw32-custom)
-  (emacsw32-custom-start))
-
-(defun emacsw32-r-short-file-name (begin end)
-  "Replace long w32 file name in region with short dito."
-  (interactive "rLong w32 file name: ")
-  (let* ((long (buffer-substring-no-properties begin end))
-         (short (w32-short-file-name long))
-         (prompt (format "Replace %s => %s ?  " long short)))
-    (if mark-active
-        (if short
-            (if (y-or-n-p prompt)
-                (progn
-                  (delete-region begin end)
-                  (insert short))
-              (message "Canceled"))
-          (message "No short w32 file name for '%s'" long))
-      (message "Region is not active"))))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;; Execute here
-
-;; Todo: Changing menus here does not adhere to Emacs standard but I
-;; think these small changes are ok and useful.
-(emacsw32-add-menus)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;; Ready:

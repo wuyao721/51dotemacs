@@ -807,7 +807,17 @@ to find the text that grep hits refer to."
 (if (not (eq system-type 'windows-nt))
     (global-set-key [f11] 'my-toggle-fullscreen)
   (global-set-key [f11] 'w32-fullscreen)
-  (autoload 'w32-fullscreen "w32-fullscreen"))
+  (autoload 'w32-fullscreen "w32-fullscreen")
+  (defvar emacsw32-menu (make-sparse-keymap "windows tools"))
+  (when (eq system-type 'windows-nt)
+    (define-key emacsw32-menu [explorer-file] '("Explorer with Current File" . w32shell-explorer-current-file))
+    (define-key emacsw32-menu [explorer] '("Explorer Here" . w32shell-explorer-here))
+    (define-key emacsw32-menu [cmd] '("Command Prompt Here" . w32shell-cmd-here))
+    (define-key-after menu-bar-tools-menu [someshell] (list 'menu-item "Emacsw32 Shells" emacsw32-menu) 'shell-on-region))
+  (autoload 'w32shell-explorer-here "w32shell")  
+  (autoload 'w32shell-explorer-current-file "w32shell")  
+  (autoload 'w32shell-cmd-here "w32shell")  
+  )
 
 ;;; set enviroment 
 (if (not (require 'env-platform nil t))

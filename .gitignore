@@ -161,3 +161,22 @@ pip-log.txt
 
 # Mac crap
 .DS_Store
+
+#############
+## Emacs
+#############
+bin
+data
+etc
+font-configuration-example.txt
+README.W32
+COPYING
+.recentf
+.bash_history
+.ido.last
+.ssh
+leim
+lisp
+lock
+org
+site-lisp
