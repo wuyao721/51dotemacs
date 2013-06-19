@@ -717,6 +717,10 @@ to find the text that grep hits refer to."
 ;;quick access for recent open file
 ;; recentf
 
+;; python
+(setq auto-mode-alist (cons '("\\.wsgi$"  . python-mode) auto-mode-alist))
+;; python
+
 ;;; c#: http://code.google.com/p/csharpmode
 ;; usage: 
 (autoload 'csharp-mode "csharp-mode" "Major mode for editing C# code." t)
