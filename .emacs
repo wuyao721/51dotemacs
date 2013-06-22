@@ -570,6 +570,13 @@
 ;;					      (setq multi-shell-command temp-multi-shell-command))))
 ;;  ) 
 
+;; mysql: sql-mysql 
+(setq sql-mysql-options '("-C" "-t" "-f" "-n")) ; show output on windows in buffer 
+(add-hook 'sql-interactive-mode-hook ; truncate lines for long tables 
+     (function (lambda () 
+          (setq truncate-lines t))))
+;; mysql
+
 ;;; xcscope: easily search for where symbols are used and defined.
 ;; usage:    C-c s (prefix key sequence)
 (if (not (require 'xcscope nil t))
