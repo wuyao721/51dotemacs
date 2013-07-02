@@ -62,8 +62,9 @@
 ;; C-c p c                           compile
 ;; C-c p e                           eshell
 ;; C-c p i                           info
-;; C-c p m                           mail
-;; C-c p p                           org2blog/wp-new-entry
+;; C-c p m                           sql-mysql
+;; C-c p o                           org2blog/wp-new-entry
+;; C-c p p                           run-python
 ;; C-c p r                           rot13-region
 ;; C-c p s                           shell-toggle-cd
 ;; C-c p t                           lambda
@@ -154,7 +155,8 @@
 (global-set-key (kbd "C-c p c") 'compile)
 (global-set-key (kbd "C-c p d g") 'gdb)
 (global-set-key (kbd "C-c p i") 'info)
-(global-set-key (kbd "C-c p m") 'mail)
+(global-set-key (kbd "C-c p m") 'sql-mysql)
+(global-set-key (kbd "C-c p p") 'run-python)
 (global-set-key (kbd "C-c p r") 'rot13-region)
 ;;(global-set-key (kbd "C-c p t") 'toggle-debug-on-error)
 (global-set-key (kbd "C-c p t") (function 
@@ -415,7 +417,7 @@
   (add-hook 'org-mode-hook (lambda () 
 			     (setq truncate-lines nil) 
 			     (org2blog/wp-mode)))
-  (global-set-key (kbd "C-c p p") 'org2blog/wp-new-entry)
+  (global-set-key (kbd "C-c p o") 'org2blog/wp-new-entry)
   (setq org2blog/wp-show-post-in-browser nil)
   (setq org2blog/wp-entry-mode-map
 	(let ((org2blog/wp-map (make-sparse-keymap)))
