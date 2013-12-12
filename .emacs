@@ -558,9 +558,9 @@
 (autoload 'multi-shell-new "multi-shell" "multi-shell-new" t)
 (setq multi-shell-buffer-name "shell")
 (global-set-key (kbd "C-c p n") 'multi-shell-new)
-(if (eq system-type 'windows-nt)
-  (setq multi-shell-command "bash")
-  (global-set-key (kbd "C-c p b") (function (lambda nil (interactive) (term "/bin/bash"))))) 
+;;(if (eq system-type 'windows-nt)
+;;  (setq multi-shell-command "bash")
+;;  (global-set-key (kbd "C-c p b") (function (lambda nil (interactive) (term "/bin/bash"))))) 
 
 ;;(global-set-key (kbd "C-c p b") (function (lambda nil (interactive) (term "/bin/bash"))))
 ;;(when (eq system-type 'windows-nt)
