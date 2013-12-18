@@ -34,12 +34,15 @@
 ;; gdb
 ;; perldb
 ;; pydb
+;; smex
 
 ;;; wuyao's global key binding
 ;; [f4]                              kill-this-buffer
 ;; [f9]                              repeat
 ;; %                                 match-paren
 ;; M-y                               yank-pop
+;; M-x                               smex
+;; M-X                               smex-major-mode-commands
 ;; C-o                               lambda: open a new line at this line
 ;; C-z                               nil (for screen)
 ;; C-c b                             popup-menu-bookmark
@@ -77,6 +80,7 @@
 ;; C-c p d y                         pydb
 ;; C-c p w                           woman
 ;; C-c p 3                           w3m
+;; C-c C-c M-x                       execute-extended-command
 ;; C-x C-b                           ibuffer                               
 ;; C-x C-e                           eval-region
 ;; C-c M-d                           my-kill-word
@@ -208,6 +212,14 @@
     (tabbar-mode))
   ;; tabbar 
   )
+
+;;; smex: A M-x enhancement
+;; usage:    M-x or M-X
+(require 'smex)
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+;; redo
 
 ;;; redo: Redo/undo system for Emacs
 ;; usage:    C-c r (or M-x redo)
