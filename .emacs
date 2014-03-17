@@ -749,6 +749,11 @@ to find the text that grep hits refer to."
       (append '(("\\.cs$" . csharp-mode)) auto-mode-alist))
 ;; c#
 
+;;; jinja2-mode: https://github.com/paradoxxxzero/jinja2-mode
+;; usage: 
+(add-to-list 'auto-mode-alist '("\\.jinja2\\'" . jinja2-mode))
+;; jinja2-mode
+
 ;;; apt: apt-get apt-cache apt-file dpkg
 ;; usage: 
 ;;(if (not (require 'apt nil t))
