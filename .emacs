@@ -512,7 +512,8 @@
 ;; vb
 
 ;;; grep: 
-(require 'grep-a-lot)
+(if (not (require 'grep-a-lot nil t))
+    (message "[warn] feature 'grep-a-lot' not found!"))
 (global-set-key (kbd "C-c g") 'grep-find)
 (global-set-key (kbd "C-c G") 'cplusplus-grep-find)
 (global-set-key (kbd "C-c t") 'grep-find-replace)
