@@ -125,6 +125,7 @@
 (setq frame-title-format "emacs@%b%@")                ;title name format
 (delete-selection-mode 1)                             ;delete selection
 (auto-image-file-mode t)                              ;show image when cross them
+(which-function-mode t)
 ;(set-language-environment "UTF-8")
 ;(set-language-environment "Chinese-GBK")
 ;; Appearance effects
