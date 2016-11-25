@@ -512,6 +512,7 @@
 ;; vb
 
 ;;; grep: 
+(require 'grep-a-lot)
 (global-set-key (kbd "C-c g") 'grep-find)
 (global-set-key (kbd "C-c G") 'cplusplus-grep-find)
 (global-set-key (kbd "C-c t") 'grep-find-replace)
