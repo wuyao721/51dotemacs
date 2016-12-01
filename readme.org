@@ -3,6 +3,25 @@
 
 这个项目存放我的emacs的配置文件。
 
+* 该项目提供特性
+  - 支持emacs23以上版本
+  - 支持windows和linux
+  - 调整显示模样，界面更加美观、方便
+  - 自定义多个快捷键
+  - 默认启用ido模式，查找文件、命令更加方便
+  - 使用ibuffer管理多个buffer
+  - 使用unicad自动识别utf8和gbk编码，打开中文文件不再出现乱码
+  - 使用browse-kill-ring可查看所有剪切下来的文本
+  - 使用dired浏览目录
+  - 使用unique保证不会有重名的buffer
+  - 对C/C++开发有较多支持
+  - 方便地查找文件（目录）内的字符串
+  - 支持svn, git等版本管理工具
+  - 使用multi-shell管理多个shell
+  - 使用C-c o快速打开最近打开过的文件
+  - 其它的特性
+
+
 * Windows平台下快速搭建Emacs
 
 ** 下载emacs
@@ -17,6 +36,7 @@
 
 ** Caps Lock & Ctrl
 可以通过注册表修改键盘按键，而我用的是一个小工具—— [[http://www.mympc.org][键盘映射工具]] 。
+windows8可用使用 *caps2ctrl.win8.reg* 来修改注册表。
 
 ** 右键打开文件
 导入 *quick\_open.reg* 到注册表，要保持与emacs的安装目录一致。
@@ -59,5 +79,5 @@
 : cp 51dotemacs/.screenrc ~/
 
 
-本说明链接： http://www.wuyao721.com/emacs-quick-setup.html
+
 
