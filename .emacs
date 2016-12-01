@@ -125,7 +125,7 @@
 (setq frame-title-format "emacs@%b%@")                ;title name format
 (delete-selection-mode 1)                             ;delete selection
 (auto-image-file-mode t)                              ;show image when cross them
-(which-function-mode t)
+(which-function-mode t)                                ;
 ;(set-language-environment "UTF-8")
 ;(set-language-environment "Chinese-GBK")
 ;; Appearance effects
@@ -214,13 +214,18 @@
   ;; tabbar 
   )
 
+;;; unicad: aoto identify multi-lang 
+(if (not (require 'unicad nil t))
+    (message "[warn] feature 'unicad' not found!"))
+;; 
+
 ;;; smex: A M-x enhancement
 ;; usage:    M-x or M-X
 (require 'smex)
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
-;; redo
+;; smex
 
 ;;; redo: Redo/undo system for Emacs
 ;; usage:    C-c r (or M-x redo)
@@ -353,6 +358,7 @@
 	c-basic-offset 4)
   (setq tab-width 4 indent-tabs-mode nil)
   (setq auto-mode-alist (cons '("\\.h$"  . c++-mode) auto-mode-alist))
+  (setq auto-mode-alist (cons '("\\.c$"  . c++-mode) auto-mode-alist))
   )
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook) ;
 (add-hook 'c-mode-hook 'my-c-mode-common-hook)        ;
@@ -752,10 +758,11 @@ to find the text that grep hits refer to."
       (append '(("\\.cs$" . csharp-mode)) auto-mode-alist))
 ;; c#
 
-;;; jinja2-mode: 
+;;; jinja2-mode: https://github.com/paradoxxxzero/jinja2-mode
+;; usage: 
 (autoload 'jinja2-mode "jinja2-mode" "Major mode for editing jinja2 template." t)
 (add-to-list 'auto-mode-alist '("\\.jinja2\\'" . jinja2-mode))
-;;; jinja2-mode: 
+;; jinja2-mode
 
 ;;; apt: apt-get apt-cache apt-file dpkg
 ;; usage: 
