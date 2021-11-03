@@ -1,2 +1,3 @@
 defflow off
 escape ^Zz
+vbell off
