@@ -83,6 +83,7 @@
 ;; C-c C-c M-x                       execute-extended-command
 ;; C-x C-b                           ibuffer                               
 ;; C-x C-e                           eval-region
+;; C-x M-r                           dired-du-mode
 ;; C-c M-d                           my-kill-word
 ;; C-c M-f                           my-forward-word
 ;; C-c M-w                           my-kill-ring-save
@@ -271,11 +272,11 @@
 
   (global-set-key (kbd "C-c j") 'dired-jump)
   (global-set-key (kbd "C-c f") 'find-dired)
+  (define-key dired-mode-map (kbd "M-o") 'dired-omit-mode)
 
   ;; wdired
   (autoload 'wdired-change-to-wdired-mode "wdired")
   (define-key dired-mode-map "r" 'wdired-change-to-wdired-mode)
-  (define-key dired-mode-map (kbd "M-o") 'dired-omit-mode)
 
   ;; dired-x
   (if (not (require 'dired-x nil t))
@@ -285,6 +286,21 @@
     (setq dired-omit-files "^\\.")                   ;omit files
     (add-hook 'dired-mode-hook
 	      (lambda () (dired-omit-mode t))))
+
+  ;; dired-du
+  (if (not (require 'dired-du nil t))
+      (message "[warn] feature 'dired-du' not found!"))
+
+  ;; code from dired-sort-map
+  (defvar dired-sort-map (make-sparse-keymap))
+  (define-key dired-mode-map "s" dired-sort-map)
+  (define-key dired-sort-map "s" (lambda () "sort by Size" (interactive) (dired-sort-other (concat dired-listing-switches " -S"))))
+  (define-key dired-sort-map "x" (lambda () "sort by eXtension" (interactive) (dired-sort-other (concat dired-listing-switches " -X"))))
+  (define-key dired-sort-map "t" (lambda () "sort by Time" (interactive) (dired-sort-other (concat dired-listing-switches " -t"))))
+  (define-key dired-sort-map "n" (lambda () "sort by Name" (interactive) (dired-sort-other dired-listing-switches)))
+  (define-key dired-sort-map "?" (lambda () "sort help" (interactive) (message "s Size; x eXtension; t Time; n Name")))
+  (define-key dired-sort-map "h" (lambda () "sort help" (interactive) (message "s Size; x eXtension; t Time; n Name")))
+  (define-key dired-sort-map "d" (lambda () "dired-du-mode" (interactive) (dired-du-mode 'toggle)))
 
   ;;  ;; dired-details
   ;;  (if (not (require 'dired-details nil t))
@@ -525,8 +541,8 @@
 ;; vb
 
 ;;; grep: 
-(if (not (require 'grep-a-lot nil t))
-    (message "[warn] feature 'grep-a-lot' not found!"))
+;(if (not (require 'grep-a-lot nil t))
+;    (message "[warn] feature 'grep-a-lot' not found!"))
 (global-set-key (kbd "C-c g") 'grep-find)
 (global-set-key (kbd "C-c G") 'cplusplus-grep-find)
 (global-set-key (kbd "C-c t") 'grep-find-replace)
