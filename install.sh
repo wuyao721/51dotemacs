@@ -6,4 +6,4 @@ cp .emacs ~/.emacs
 cp .screenrc ~/.screenrc
 cp -r .emacs.d/elisp ~/.emacs.d/
 
-echo 'Done.'
+echo 'Done'
