@@ -223,8 +223,8 @@
 ;; usage:    M-x or M-X
 (require 'smex)
 (global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "M-X") 'smex-major-mode-commands)
-(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+;(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+;(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
 ;; smex
 
 ;;; redo: Redo/undo system for Emacs
@@ -273,6 +273,52 @@
   (global-set-key (kbd "C-c j") 'dired-jump)
   (global-set-key (kbd "C-c f") 'find-dired)
   (define-key dired-mode-map (kbd "M-o") 'dired-omit-mode)
+
+  ;; compact dired display: use built-in ls-lisp for format control
+  ;; 背景：AI 时代需要分屏给 Claude Code 等工具使用，屏幕宽度紧张，
+  ;;       压缩 dired 列宽以适应窄窗口显示（去掉硬链接数、组名，精简权限和日期）
+  (require 'ls-lisp)
+  (setq ls-lisp-use-insert-directory-program nil)  ; use Emacs built-in ls
+  (setq ls-lisp-verbosity '(uid))                  ; show only owner (no links, no group)
+  (setq ls-lisp-format-time-list                    ; compact date: 26-04-05 02:40
+        '("%y-%m-%d %H:%M" "%y-%m-%d %H:%M"))
+  (setq ls-lisp-use-localized-time-format t)
+
+  ;; hide group+other permission bits (keep type + owner rwx)
+  ;; e.g. drwxr-xr-x -> drwx, -rw-r--r-- -> -rw-
+  (defun my-dired-hide-permission-details ()
+    "Hide group+other permissions in dired, keep file type and owner rwx."
+    (save-excursion
+      (let ((inhibit-read-only t))
+        (goto-char (point-min))
+        (while (not (eobp))
+          (when (looking-at "^  \\([dlcbps-][rwxsStT-]\\{3\\}\\)\\([rwxsStT-]\\{6\\}\\)")
+            (put-text-property (match-beginning 2) (match-end 2)
+                               'invisible 'my-dired-perm))
+          (forward-line 1)))))
+  (defun my-dired-setup-compact-display ()
+    "Setup compact display for dired buffers."
+    (add-to-invisibility-spec 'my-dired-perm))
+  (add-hook 'dired-mode-hook 'my-dired-setup-compact-display)
+  (add-hook 'dired-after-readin-hook 'my-dired-hide-permission-details)
+
+  ;; dired header line: insert column names at top for clarity
+  ;; note: header-line-format doesn't work in terminal mode (-nw),
+  ;;       so we insert header text directly into the buffer instead
+  (defun my-dired-insert-header ()
+    "Insert a column header line at the top of dired buffer."
+    (save-excursion
+      (let ((inhibit-read-only t))
+        (goto-char (point-min))
+        ;; skip the "total ..." or directory line
+        (when (re-search-forward "^  [dlcbps-]" nil t)
+          (goto-char (match-beginning 0))
+          ;; avoid duplicate headers on revert
+          (unless (save-excursion
+                    (forward-line -1)
+                    (looking-at "^  Perm"))
+            (insert "  Perm Owner      Size Date     Time  Name\n"))))))
+  (add-hook 'dired-after-readin-hook 'my-dired-insert-header)
 
   ;; wdired
   (autoload 'wdired-change-to-wdired-mode "wdired")
@@ -547,7 +593,7 @@
 (global-set-key (kbd "C-c G") 'cplusplus-grep-find)
 (global-set-key (kbd "C-c t") 'grep-find-replace)
 (global-set-key (kbd "C-c T") 'cplusplus-grep-find-replace)
-(setq grep-find-command "find . -name '*' -type f -print0 | xargs -0 -e grep -nH -e ")
+(setq grep-find-command "find . -name '*' -type f -print0 | xargs -0 grep -nH -e ")
 ;; grep 
 
 ;;; magit-emacs: magit interface for emacs
@@ -641,15 +687,15 @@
 
 ;; web-mode: major mode for editing HTML templates
 ;; usage:    just open the files
-(require 'web-mode)
-(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.jsp\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+;(require 'web-mode)
+;(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+;(add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
+;(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+;(add-to-list 'auto-mode-alist '("\\.jsp\\'" . web-mode))
+;(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+;(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+;(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+;(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 ;; web-mode
 
 ;;; lua: lua mode
@@ -876,3 +922,19 @@ to find the text that grep hits refer to."
 (if (eq system-type 'windows-nt)
     (server-start)) 
 ;; emacs server 
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages '(magit))
+ '(sr-speedbar-default-width 30)
+ '(sr-speedbar-max-width 50)
+ '(sr-speedbar-right-side nil)
+ '(sr-speedbar-skip-other-window-p t))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
